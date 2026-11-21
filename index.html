@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stillwood — A Forest Bathing Sanctuary</title>
+<meta name="description" content="Nine slow trails through 214 hectares of old growth in the Cascade foothills. No engines, no schedules — just light, moss, and time.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f2a93b' d='M12 2C7 7 4 12 6 17c2 4 8 5 12 1-5 1-8-1-9-4C8 10 9 6 12 2z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg0:#0a150d; --bg1:#0f2013; --bg2:#16301c;
+  --surface:#122a19; --surface2:#1a3622;
+  --moss:#4c8f3a; --leaf:#7cc25e; --fern:#a5d46a;
+  --amber:#f2a93b; --amber-hi:#f4c142; --amber-deep:#d97f22;
+  --rust:#e07a52; --rust-deep:#c4502e;
+  --mist:#b8cfc0; --mist-blue:#8fb8ad;
+  --cream:#f3ead8; --sage:#a9bfa6;
+  --bark:#3a2c1e; --bark-line:#241a10;
+  --paper:#f3ead8; --paper-card:#fbf6ea; --ink:#20351f; --ink-soft:#5a6b52; --line-light:#d9cdb2;
+  --ok:#7cc25e; --warn:#f2b23c; --danger:#e07a52; --info:#8fb8ad;
+  --font-d:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-b:'Karla',system-ui,-apple-system,sans-serif;
+  --nav-h:72px; --hueShift:0deg;
+  --r-card:18px; --r-panel:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-b); background:var(--bg0); color:var(--cream);
+  line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--amber);color:#221503}
+:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px;border-radius:4px}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:1rem}
+
+/* ============ SCROLLBARS ============ */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:#0c1a10}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#4c8f3a,#2f5a26);border-radius:8px;border:3px solid #0c1a10}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f2a93b,#d97f22)}
+*{scrollbar-width:thin;scrollbar-color:#4c8f3a #0c1a10}
+
+/* ============ UTILITIES ============ */
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+section{scroll-margin-top:calc(var(--nav-h) + 20px);position:relative}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:1px;background:linear-gradient(90deg,var(--moss),var(--amber))}
+h1,h2,h3,.display{font-family:var(--font-d);font-weight:480;line-height:1.12;letter-spacing:-.01em}
+h2{font-size:clamp(2.1rem,4.6vw,3.4rem);margin:14px 0 16px}
+.lead{color:var(--sage);font-size:1.06rem;max-width:56ch}
+.icon{width:18px;height:18px;flex:none}
+.skip{position:absolute;left:-999px;top:8px;z-index:200;background:var(--amber);color:#221503;padding:10px 18px;border-radius:99px;font-weight:700}
+.skip:focus{left:8px}
+
+/* grain */
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.6'/></svg>");}
+
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;gap:10px;border:none;border-radius:999px;font-weight:700;font-size:.95rem;
+  padding:14px 26px;text-decoration:none;transition:transform .25s,box-shadow .25s,background .25s,color .25s;position:relative}
+.btn-primary{background:linear-gradient(135deg,var(--amber-hi),var(--amber-deep));color:#221503;box-shadow:0 6px 24px rgba(242,169,59,.22)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(242,169,59,.4)}
+.btn-ghost{background:rgba(124,194,94,.08);color:var(--cream);border:1px solid rgba(124,194,94,.4)}
+.btn-ghost:hover{background:rgba(124,194,94,.18);transform:translateY(-2px)}
+.btn-sm{padding:10px 20px;font-size:.85rem}
+.btn .icon{width:16px;height:16px}
+
+/* ============ NAV ============ */
+.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:90;display:flex;align-items:center;
+  transition:background .4s,border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent;
+  animation:navIn .8s .2s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes navIn{from{transform:translateY(-100%);opacity:0}}
+.nav.scrolled{background:rgba(10,20,13,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:rgba(124,194,94,.18)}
+.nav-inner{width:100%;max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:26px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--font-d);font-size:1.35rem;font-weight:600;letter-spacing:.01em}
+.brand-mark{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#2a4a22,#122a19);border:1px solid rgba(242,169,59,.5);display:grid;place-items:center;box-shadow:0 0 18px rgba(242,169,59,.25)}
+.brand-mark svg{width:18px;height:18px}
+.nav-links{display:flex;gap:4px;margin-left:auto}
+.nav-links a{text-decoration:none;font-size:.88rem;font-weight:500;color:var(--sage);padding:9px 14px;border-radius:99px;position:relative;transition:color .25s,background .25s}
+.nav-links a:hover{color:var(--cream);background:rgba(124,194,94,.1)}
+.nav-links a.active{color:var(--amber-hi)}
+.nav-links a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--moss),var(--amber))}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--moss),var(--amber-hi));box-shadow:0 0 10px rgba(242,169,59,.6)}
+
+/* sound toggle */
+.sound{display:flex;align-items:center;gap:8px;background:rgba(124,194,94,.1);border:1px solid rgba(124,194,94,.35);color:var(--cream);
+  border-radius:99px;padding:8px 14px;font-size:.8rem;font-weight:700;transition:background .25s,border-color .25s}
+.sound:hover{background:rgba(124,194,94,.2)}
+.sound .icon{width:16px;height:16px;color:var(--amber-hi)}
+.sound .eq{display:flex;align-items:flex-end;gap:2px;height:12px}
+.sound .eq i{width:3px;border-radius:2px;background:var(--leaf);height:4px;transition:background .3s}
+.sound.playing .eq i{animation:eq 1s ease-in-out infinite}
+.sound.playing .eq i:nth-child(2){animation-delay:.25s}
+.sound.playing .eq i:nth-child(3){animation-delay:.5s}
+@keyframes eq{0%,100%{height:4px}50%{height:12px}}
+.sound.muted .eq i{background:#5a6b52;animation:none;height:4px}
+.sound.muted .icon{color:#8a9a84}
+.burger{display:none;width:42px;height:42px;border-radius:12px;background:rgba(124,194,94,.1);border:1px solid rgba(124,194,94,.35);position:relative}
+.burger span{position:absolute;left:11px;right:11px;height:2px;background:var(--cream);border-radius:2px;transition:transform .3s,top .3s,opacity .3s}
+.burger span:nth-child(1){top:15px}.burger span:nth-child(2){top:21px}.burger span:nth-child(3){top:27px}
+body.menu-open .burger span:nth-child(1){top:21px;transform:rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){top:21px;transform:rotate(-45deg)}
+
+/* mobile menu */
+.mmenu{position:fixed;inset:var(--nav-h) 0 0 0;z-index:85;background:linear-gradient(165deg,#0c1a10 0%,#122a19 60%,#1e3a20 100%);
+  display:flex;flex-direction:column;padding:40px 32px;gap:6px;opacity:0;pointer-events:none;transition:opacity .35s;overflow-y:auto}
+body.menu-open .mmenu{opacity:1;pointer-events:auto}
+body.menu-open{overflow:hidden}
+.mmenu a{font-family:var(--font-d);font-size:2rem;text-decoration:none;color:var(--cream);padding:12px 0;border-bottom:1px solid rgba(124,194,94,.15);
+  display:flex;justify-content:space-between;align-items:center;opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s,color .25s}
+.mmenu a:hover{color:var(--amber-hi)}
+.mmenu a .icon{color:var(--moss)}
+body.menu-open .mmenu a{opacity:1;transform:none}
+body.menu-open .mmenu a:nth-child(1){transition-delay:.06s}body.menu-open .mmenu a:nth-child(2){transition-delay:.12s}
+body.menu-open .mmenu a:nth-child(3){transition-delay:.18s}body.menu-open .mmenu a:nth-child(4){transition-delay:.24s}
+body.menu-open .mmenu a:nth-child(5){transition-delay:.3s}
+.mmenu .btn{margin-top:26px;justify-content:center}
+
+/* ============ HERO ============ */
+.hero{position:relative;height:100svh;min-height:640px;overflow:hidden;background:linear-gradient(180deg,#122a18,#2e4a22 55%,#142a16)}
+.sceneWrap{position:absolute;inset:0;animation:sceneIn 1.8s cubic-bezier(.2,.7,.2,1) backwards}
+@keyframes sceneIn{from{opacity:0;transform:scale(1.06)}}
+.scene{position:absolute;inset:0}
+.scene svg{width:100%;height:100%}
+#heroFx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.heroScrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,18,9,.35) 0%,rgba(8,18,9,0) 26%,rgba(8,18,9,0) 52%,rgba(8,18,9,.82) 100%),
+  radial-gradient(70% 60% at 22% 88%,rgba(8,18,9,.55),transparent 70%)}
+.heroContent{position:absolute;left:6%;bottom:11%;max-width:660px;z-index:3}
+.heroContent>*{opacity:0;animation:riseIn .9s cubic-bezier(.2,.8,.2,1) forwards}
+.heroContent>*:nth-child(1){animation-delay:.5s}.heroContent>*:nth-child(2){animation-delay:.65s}
+.heroContent>*:nth-child(3){animation-delay:.82s}.heroContent>*:nth-child(4){animation-delay:.98s}.heroContent>*:nth-child(5){animation-delay:1.14s}
+@keyframes riseIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.hero h1{font-size:clamp(2.5rem,6.2vw,4.9rem);font-weight:440;line-height:1.04;margin:16px 0 18px;text-shadow:0 2px 30px rgba(8,18,9,.6)}
+.hero h1 em{font-style:italic;background:linear-gradient(100deg,var(--amber-hi) 10%,var(--cream) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#d8e2cc;font-size:clamp(.98rem,1.4vw,1.12rem);max-width:52ch;text-shadow:0 1px 16px rgba(8,18,9,.7)}
+.ctaRow{display:flex;gap:14px;margin-top:26px;flex-wrap:wrap}
+.heroMeta{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:.76rem;font-weight:700;letter-spacing:.04em;color:var(--mist);
+  background:rgba(10,22,13,.55);border:1px solid rgba(184,207,192,.25);border-radius:99px;padding:7px 13px;backdrop-filter:blur(6px)}
+.chip .icon{width:13px;height:13px;color:var(--amber)}
+.scrollCue{position:absolute;right:6%;bottom:9%;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;
+  color:var(--mist);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;writing-mode:vertical-rl;opacity:0;animation:riseIn 1s 1.5s forwards}
+.scrollCue .line{width:1px;height:56px;background:linear-gradient(180deg,var(--amber),transparent);position:relative;overflow:hidden}
+.scrollCue .line::after{content:"";position:absolute;left:0;top:-20px;width:1px;height:20px;background:var(--cream);animation:cueDrop 2s ease-in-out infinite}
+@keyframes cueDrop{to{top:60px}}
+
+/* ============ SCENE PALETTES ============ */
+.scene{
+  --skyTop:#122a18;--skyBot:#2e4a22;--sunCore:#fff3cf;--sunHalo:#f2a93b;--far:#7fa877;
+  --trunk:#4a3a2c;--trunkLit:#96703c;--barkLine:#241a10;--mossA:#6f9c40;--mossB:#2f5a26;
+  --leafA:#a8c85a;--leafB:#5d9c3f;--leafC:#33692c;--litterA:#e8a13c;--litterB:#c46a24;--litterC:#e8c04a;
+  --pathFar:#8a6b42;--pathNear:#3c2c1e;--pathLit:#e8b25c;--groundA:#2e4a26;--groundB:#142a16;
+  --mistC:#d6e6c8;--fernA:#3f7a33;--fernB:#6fae4e;--ray:#ffe9b0;--shade:#0a1a0e;--sparkOp:1;--flower:#f4f1e2;
+}
+.scene[data-season="spring"]{--skyTop:#16301e;--skyBot:#3a5a2a;--sunCore:#fff8dc;--sunHalo:#edc75a;--far:#8fb884;
+  --trunk:#4a3f2e;--trunkLit:#9a7a44;--mossA:#7cb84a;--mossB:#3a6b2c;--leafA:#b8dc6a;--leafB:#7cb84a;--leafC:#4f9440;
+  --litterA:#e8c9d8;--litterB:#d8a8c0;--litterC:#f2e6ee;--pathFar:#96784a;--pathNear:#4a3626;--pathLit:#f2d98a;
+  --groundA:#3a5a2c;--groundB:#1a3318;--mistC:#e2eed6;--fernA:#4f9440;--fernB:#8cc45e;--ray:#fff2c0;--shade:#0e2212}
+.scene[data-season="summer"]{--skyTop:#143018;--skyBot:#2e5222;--sunCore:#fff6d0;--sunHalo:#f2b23c;--far:#6f9c6a;
+  --trunk:#46382a;--trunkLit:#8f6c3a;--mossA:#67953c;--mossB:#2c5424;--leafA:#8cc45e;--leafB:#4c8f3a;--leafC:#2a6428;
+  --litterA:#8a6b3f;--litterB:#6b4f2c;--litterC:#a8863f;--pathFar:#7a6238;--pathNear:#33261a;--pathLit:#e8c06a;
+  --groundA:#2a4a20;--groundB:#122612;--mistC:#cfe0c0;--fernA:#2f6b2c;--fernB:#5d9c3f;--ray:#ffedb0;--shade:#0a1c0c}
+.scene[data-season="winter"]{--skyTop:#1a2e2c;--skyBot:#2e4442;--sunCore:#f6efd8;--sunHalo:#d8c9a0;--far:#8aa094;
+  --trunk:#3f3a32;--trunkLit:#7a7264;--barkLine:#201d18;--mossA:#7a9468;--mossB:#46603e;--leafA:#9db8a4;--leafB:#7a9a86;--leafC:#5d7a68;
+  --litterA:#e9efe6;--litterB:#cfdcd2;--litterC:#f4f7f0;--pathFar:#8a8478;--pathNear:#4a443c;--pathLit:#d8d2c0;
+  --groundA:#3a4a42;--groundB:#1c2a26;--mistC:#e2eae4;--fernA:#5d7a58;--fernB:#7a9a70;--ray:#f2ecd8;--shade:#101f1c;--sparkOp:0;--flower:#eef2ea}
+
+/* scene element classes */
+.scene .f-far{fill:var(--far)} .scene .f-haze{fill:var(--leafC)}
+.scene .f-sunCore{fill:var(--sunCore)} .scene .f-sunHalo{fill:var(--sunHalo)}
+.scene .f-leafA{fill:var(--leafA)} .scene .f-leafB{fill:var(--leafB)} .scene .f-leafC{fill:var(--leafC)}
+.scene .f-litterA{fill:var(--litterA)} .scene .f-litterB{fill:var(--litterB)} .scene .f-litterC{fill:var(--litterC)}
+.scene .f-pathLit{fill:var(--pathLit)} .scene .f-pebble{fill:#9a8f7c}
+.scene .f-mist{fill:var(--mistC)} .scene .f-fernA{fill:var(--fernA)} .scene .f-fernB{fill:var(--fernB)}
+.scene .f-flower{fill:var(--flower)} .scene .f-flowerCore{fill:var(--sunHalo)}
+.scene .f-bark{stroke:var(--barkLine)} .scene .f-branch{stroke:var(--trunk)} .scene .f-stem{stroke:var(--fernB)}
+.scene .s-skyTop{stop-color:var(--skyTop)} .scene .s-skyBot{stop-color:var(--skyBot)}
+.scene .s-sunCore{stop-color:var(--sunCore)} .scene .s-sunHalo{stop-color:var(--sunHalo)}
+.scene .s-trunkDark{stop-color:var(--trunk)} .scene .s-trunkLit{stop-color:var(--trunkLit)}
+.scene .s-mossA{stop-color:var(--mossA)} .scene .s-mossB{stop-color:var(--mossB)}
+.scene .s-ray{stop-color:var(--ray)} .scene .s-pathFar{stop-color:var(--pathFar)} .scene .s-pathNear{stop-color:var(--pathNear)}
+.scene .s-groundA{stop-color:var(--groundA)} .scene .s-groundB{stop-color:var(--groundB)} .scene .s-shade{stop-color:var(--shade)}
+.scene path,.scene ellipse,.scene circle,.scene rect,.scene use,.scene stop,.scene polygon{transition:fill .9s ease,stop-color .9s ease,opacity .9s ease,stroke .9s ease}
+.scene .live{transition:none}
+.scene g[data-depth]{will-change:transform}
+.scene .ray{mix-blend-mode:screen;animation:rayPulse 8s ease-in-out infinite alternate}
+.scene .ray.r1{animation-duration:11s;animation-delay:-3s}.scene .ray.r2{animation-duration:9s;animation-delay:-5s}
+.scene .ray.r3{animation-duration:12s;animation-delay:-2s}.scene .ray.r4{animation-duration:10s;animation-delay:-7s}
+@keyframes rayPulse{from{opacity:.55}to{opacity:1}}
+.scene .mistBand{animation:mistDrift 16s ease-in-out infinite alternate}
+.scene .mistBand.m2{animation-duration:22s;animation-delay:-6s}
+.scene .mistBand.m3{animation-duration:19s;animation-delay:-11s}
+@keyframes mistDrift{from{transform:translateX(-34px)}to{transform:translateX(34px)}}
+.scene.still .mistBand{animation-play-state:paused}
+.scene .sparks{opacity:var(--sparkOp)}
+.scene .spark{fill:#ffe9a0;animation:sparkFloat 7s ease-in-out infinite}
+.scene .spark.s1{animation-delay:-2s}.scene .spark.s2{animation-delay:-4s}.scene .spark.s3{animation-delay:-1s}.scene .spark.s4{animation-delay:-5.5s}
+@keyframes sparkFloat{0%,100%{transform:translate(0,0);opacity:.15}45%{opacity:.95}50%{transform:translate(10px,-16px)}90%{opacity:.3}}
+
+/* ============ SECTION SHELLS ============ */
+.sect{padding:112px 0}
+.glowfield{position:absolute;inset:0;pointer-events:none;overflow:hidden;filter:hue-rotate(var(--hueShift))}
+.glowfield::before,.glowfield::after{content:"";position:absolute;border-radius:50%;filter:blur(70px)}
+.glowfield::before{width:56vw;height:56vw;left:-18vw;top:-20vw;background:radial-gradient(circle,rgba(76,143,58,.22),transparent 65%);animation:auraA 22s ease-in-out infinite alternate}
+.glowfield::after{width:44vw;height:44vw;right:-14vw;bottom:-16vw;background:radial-gradient(circle,rgba(242,169,59,.13),transparent 65%);animation:auraB 27s ease-in-out infinite alternate}
+@keyframes auraA{to{transform:translate(9vw,7vh) scale(1.15)}}
+@keyframes auraB{to{transform:translate(-7vw,-6vh) scale(.9)}}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============ PRACTICE ============ */
+#practice{background:linear-gradient(180deg,var(--bg0) 0%,var(--bg1) 30%,var(--bg2) 100%)}
+.contours{position:absolute;right:-8%;top:4%;width:58%;opacity:.6;pointer-events:none}
+.practice-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:start;position:relative}
+.practice-left{position:sticky;top:calc(var(--nav-h) + 34px)}
+.dropcap::first-letter{font-family:var(--font-d);font-size:3.4em;float:left;line-height:.82;padding:6px 12px 0 0;color:var(--amber);font-style:italic}
+.practice-left p{color:var(--sage);margin-bottom:18px;max-width:54ch}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px}
+.stat{background:rgba(18,42,25,.7);border:1px solid rgba(124,194,94,.22);border-radius:var(--r-card);padding:20px 22px;transition:border-color .3s,transform .3s}
+.stat:hover{border-color:rgba(242,169,59,.5);transform:translateY(-3px)}
+.stat b{font-family:var(--font-d);font-weight:500;font-size:2.5rem;color:var(--amber-hi);display:block;line-height:1}
+.stat span{font-size:.8rem;color:var(--sage);letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+.ritual{display:flex;gap:22px;background:linear-gradient(150deg,rgba(26,54,34,.85),rgba(18,42,25,.85));border:1px solid rgba(124,194,94,.2);
+  border-radius:var(--r-panel);padding:30px 30px 30px 26px;margin-bottom:22px;position:relative;overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s}
+.ritual:hover{transform:translateY(-4px);border-color:rgba(242,169,59,.45);box-shadow:0 18px 44px rgba(6,14,8,.5)}
+.ritual::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--moss),var(--amber))}
+.ritual .num{font-family:var(--font-d);font-style:italic;font-size:2.6rem;color:var(--amber-deep);line-height:1;min-width:64px}
+.ritual h3{font-size:1.45rem;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.ritual h3 .icon{color:var(--leaf);width:20px;height:20px}
+.ritual p{color:var(--sage);font-size:.95rem}
+
+/* ============ TRAILS ============ */
+#trails{background:linear-gradient(180deg,var(--bg2),var(--bg0) 40%)}
+.trails-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.fbtn{background:rgba(124,194,94,.08);border:1px solid rgba(124,194,94,.3);color:var(--sage);border-radius:99px;padding:9px 18px;font-size:.82rem;font-weight:700;transition:all .25s}
+.fbtn:hover{color:var(--cream);border-color:var(--leaf)}
+.fbtn[aria-pressed="true"]{background:linear-gradient(135deg,var(--amber-hi),var(--amber-deep));color:#221503;border-color:transparent;box-shadow:0 4px 18px rgba(242,169,59,.3)}
+.fcount{font-size:.78rem;color:var(--sage);margin-left:6px}
+.trail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:22px}
+.trail{background:var(--surface);border:1px solid rgba(124,194,94,.2);border-radius:var(--r-card);overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .35s,border-color .35s,box-shadow .35s;animation:cardPop .5s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes cardPop{from{opacity:0;transform:translateY(18px) scale(.97)}}
+.trail:hover{transform:translateY(-6px);border-color:rgba(242,169,59,.5);box-shadow:0 22px 50px rgba(6,14,8,.55)}
+.trail.hide{display:none}
+.mini{height:150px;overflow:hidden;position:relative}
+.mini svg{width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.trail:hover .mini svg{transform:scale(1.07)}
+.mini::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(18,42,25,.9))}
+.trail-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.trail-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.trail h3{font-size:1.35rem}
+.dchip{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:99px;padding:5px 11px;white-space:nowrap}
+.d-gentle{color:var(--ok);background:rgba(124,194,94,.12);border:1px solid rgba(124,194,94,.4)}
+.d-moderate{color:var(--warn);background:rgba(242,178,60,.1);border:1px solid rgba(242,178,60,.4)}
+.d-wild{color:var(--danger);background:rgba(224,122,82,.1);border:1px solid rgba(224,122,82,.4)}
+.tstats{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--mist)}
+.tstats span{display:inline-flex;align-items:center;gap:6px}
+.tstats .icon{width:14px;height:14px;color:var(--amber)}
+.trail p{font-size:.88rem;color:var(--sage);flex:1}
+.tlink{display:inline-flex;align-items:center;gap:8px;background:none;border:none;color:var(--amber-hi);font-weight:700;font-size:.88rem;padding:4px 0;align-self:flex-start;transition:gap .25s}
+.tlink:hover{gap:13px}
+.tlink .icon{width:15px;height:15px}
+
+/* ============ MODAL ============ */
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:22px}
+.modal.open{display:flex}
+.modal-scrim{position:absolute;inset:0;background:rgba(6,13,8,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}}
+.modal-panel{position:relative;width:min(760px,100%);max-height:88vh;overflow-y:auto;background:linear-gradient(170deg,#1a3622,#122a19);
+  border:1px solid rgba(242,169,59,.35);border-radius:var(--r-panel);box-shadow:0 40px 100px rgba(0,0,0,.6);animation:panelIn .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(30px) scale(.97)}}
+.modal-mini{height:230px;position:relative}
+.modal-mini svg{width:100%;height:100%}
+.modal-mini::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,#16301c)}
+.modal-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(8,18,9,.65);border:1px solid rgba(184,207,192,.35);color:var(--cream);display:grid;place-items:center;z-index:2;transition:background .25s,transform .25s}
+.modal-close:hover{background:rgba(196,80,46,.6);transform:rotate(90deg)}
+.modal-body{padding:8px 34px 34px}
+.modal-body h3{font-size:2.1rem;margin-bottom:10px}
+.modal-body .tstats{margin:14px 0 18px;font-size:.86rem}
+.modal-body p{color:var(--sage);margin-bottom:14px;font-size:.96rem}
+.notices{list-style:none;margin:6px 0 22px;display:grid;gap:9px}
+.notices li{display:flex;gap:11px;align-items:flex-start;font-size:.9rem;color:var(--mist)}
+.notices .icon{color:var(--leaf);margin-top:3px;width:15px;height:15px}
+.modal-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid rgba(124,194,94,.2);padding-top:22px}
+.mprice{font-family:var(--font-d);font-size:1.7rem;color:var(--amber-hi)}
+.mprice small{font-family:var(--font-b);font-size:.78rem;color:var(--sage);display:block;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+
+/* ============ SEASONS ============ */
+#seasons{background:linear-gradient(180deg,var(--bg0),#101f16 45%,var(--bg1))}
+.seasons-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:36px;align-items:start;margin-top:38px}
+.scene-panel{border:1px solid rgba(124,194,94,.3);border-radius:var(--r-panel);overflow:hidden;background:#0c1a10;box-shadow:0 30px 70px rgba(6,14,8,.55);position:relative}
+.scene-stage{position:relative;aspect-ratio:16/10}
+.scene-stage .scene svg{position:absolute;inset:0}
+.scene-caption{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;border-top:1px solid rgba(124,194,94,.2);background:rgba(12,26,16,.9);flex-wrap:wrap}
+.scene-caption .cap-name{font-family:var(--font-d);font-style:italic;font-size:1.35rem;color:var(--amber-hi)}
+.scene-caption .cap-note{font-size:.82rem;color:var(--sage);max-width:46ch}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(124,194,94,.1);border:1px solid rgba(124,194,94,.4);color:var(--cream);border-radius:99px;padding:10px 18px;font-size:.8rem;font-weight:700;transition:all .25s;white-space:nowrap}
+.dl-btn:hover{background:rgba(242,169,59,.18);border-color:var(--amber)}
+.dl-btn .icon{width:15px;height:15px;color:var(--amber-hi)}
+.controls{background:linear-gradient(160deg,rgba(26,54,34,.75),rgba(18,42,25,.9));border:1px solid rgba(124,194,94,.25);border-radius:var(--r-panel);padding:28px}
+.controls h3{font-size:1.3rem;margin-bottom:4px}
+.controls .hint{font-size:.8rem;color:var(--sage);margin-bottom:20px}
+.season-chips{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:24px}
+.schip{display:flex;align-items:center;gap:9px;background:rgba(10,22,13,.5);border:1px solid rgba(124,194,94,.28);color:var(--sage);border-radius:13px;padding:11px 14px;font-size:.85rem;font-weight:700;transition:all .25s}
+.schip i{width:11px;height:11px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+.schip:hover{color:var(--cream);border-color:var(--leaf)}
+.schip[aria-pressed="true"]{background:rgba(242,169,59,.14);border-color:var(--amber);color:var(--amber-hi)}
+.ctl{margin-bottom:19px}
+.ctl-row{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mist);margin-bottom:8px}
+.ctl-row output{color:var(--amber-hi);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,#2f5a26,var(--moss) 55%,var(--amber));outline-offset:6px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 34% 30%,var(--amber-hi),var(--amber-deep));border:2px solid #0c1a10;box-shadow:0 0 0 2px rgba(242,169,59,.55),0 3px 10px rgba(0,0,0,.5);transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.18)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--amber);border:2px solid #0c1a10;box-shadow:0 0 0 2px rgba(242,169,59,.55)}
+.switchrow{display:flex;justify-content:space-between;align-items:center;margin:22px 0;font-size:.85rem;font-weight:700;color:var(--mist)}
+.switch{position:relative;width:48px;height:26px;flex:none}
+.switch input{position:absolute;opacity:0;inset:0;cursor:pointer;z-index:2}
+.switch .track{position:absolute;inset:0;border-radius:99px;background:#22371f;border:1px solid rgba(124,194,94,.35);transition:background .3s}
+.switch .track::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--sage);transition:transform .3s,background .3s}
+.switch input:checked+.track{background:linear-gradient(90deg,var(--moss),#6fae4e)}
+.switch input:checked+.track::after{transform:translateX(22px);background:var(--cream)}
+.switch input:focus-visible+.track{outline:2px solid var(--amber-hi);outline-offset:3px}
+.ctl-actions{display:flex;gap:10px;margin-top:6px}
+.reset-btn{flex:1;background:none;border:1px solid rgba(184,207,192,.35);color:var(--mist);border-radius:99px;padding:11px;font-size:.82rem;font-weight:700;transition:all .25s}
+.reset-btn:hover{border-color:var(--rust);color:var(--rust)}
+.season-note{margin-top:20px;font-size:.86rem;color:var(--sage);font-style:italic;border-left:2px solid var(--amber-deep);padding-left:14px;min-height:3.4em}
+
+/* ============ VOICES ============ */
+#voices{background:linear-gradient(160deg,#101f1a 0%,#1a2a2e 55%,#221f2c 100%)}
+#voices .glowfield::before{background:radial-gradient(circle,rgba(143,184,173,.16),transparent 65%)}
+#voices .glowfield::after{background:radial-gradient(circle,rgba(242,169,59,.12),transparent 65%)}
+.voices-box{max-width:840px;margin:0 auto;text-align:center;position:relative}
+.qmark{width:52px;height:52px;margin:0 auto 8px;color:var(--amber-deep);opacity:.9}
+.voices-stack{display:grid;margin-top:10px}
+.voice{grid-area:1/1;opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;pointer-events:none;padding:0 8px}
+.voice.active{opacity:1;transform:none;pointer-events:auto}
+.voice blockquote{font-family:var(--font-d);font-style:italic;font-weight:400;font-size:clamp(1.25rem,2.6vw,1.85rem);line-height:1.42;color:var(--cream)}
+.voice .who{margin-top:22px;font-size:.85rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-hi)}
+.voice .who span{display:block;color:var(--mist-blue);font-weight:500;letter-spacing:.05em;margin-top:3px;text-transform:none}
+.leaves{display:flex;justify-content:center;gap:5px;margin-top:14px}
+.leaves .icon{width:15px;height:15px;color:var(--leaf)}
+.voice-nav{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:34px}
+.vnav{width:44px;height:44px;border-radius:50%;background:rgba(143,184,173,.08);border:1px solid rgba(143,184,173,.35);color:var(--mist);display:grid;place-items:center;transition:all .25s}
+.vnav:hover{background:rgba(242,169,59,.15);border-color:var(--amber);color:var(--amber-hi);transform:scale(1.08)}
+.dots{display:flex;gap:9px}
+.dot{width:9px;height:9px;border-radius:50%;border:none;background:rgba(184,207,192,.3);transition:all .3s;padding:0}
+.dot.active{background:var(--amber-hi);transform:scale(1.35);box-shadow:0 0 10px rgba(242,169,59,.6)}
+.vprogress{width:180px;height:2px;background:rgba(184,207,192,.18);border-radius:2px;margin:22px auto 0;overflow:hidden}
+.vprogress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mist-blue),var(--amber-hi))}
+.vprogress i.run{animation:vrun 6s linear forwards}
+.voices-box:hover .vprogress i.run,.voices-box:focus-within .vprogress i.run{animation-play-state:paused}
+@keyframes vrun{to{width:100%}}
+
+/* ============ VISIT (paper) ============ */
+#visit{background:var(--paper);color:var(--ink)}
+#visit::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--moss),var(--amber-hi) 45%,var(--rust) 80%,var(--moss))}
+#visit .eyebrow{color:var(--rust-deep)}
+#visit .eyebrow::before{background:linear-gradient(90deg,var(--moss),var(--rust-deep))}
+#visit h2{color:var(--ink)}
+#visit .lead{color:var(--ink-soft)}
+.visit-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start;margin-top:20px}
+.info-block{margin-bottom:30px}
+.info-block h3{font-size:1.25rem;margin-bottom:12px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.info-block h3 .icon{color:var(--moss)}
+.hours{width:100%;border-collapse:collapse;font-size:.9rem}
+.hours td{padding:9px 4px;border-bottom:1px dashed var(--line-light);color:var(--ink-soft)}
+.hours td:first-child{font-weight:700;color:var(--ink)}
+.hours td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.know{list-style:none;display:grid;gap:10px}
+.know li{display:flex;gap:11px;font-size:.9rem;color:var(--ink-soft);align-items:flex-start}
+.know .icon{color:var(--amber-deep);margin-top:3px;width:15px;height:15px}
+.coords{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;color:var(--moss);text-decoration:none;border-bottom:1px solid rgba(76,143,58,.4);padding-bottom:2px;transition:color .25s}
+.coords:hover{color:var(--rust-deep)}
+
+.book-card{background:var(--paper-card);border:1px solid var(--line-light);border-radius:var(--r-panel);padding:34px;box-shadow:0 24px 60px rgba(90,70,30,.16);position:relative;transition:box-shadow .4s}
+.book-card.flash{animation:flashRing 1.4s ease}
+@keyframes flashRing{0%,100%{box-shadow:0 24px 60px rgba(90,70,30,.16)}30%{box-shadow:0 0 0 5px rgba(242,169,59,.65),0 24px 60px rgba(90,70,30,.3)}}
+.book-card h3{font-size:1.6rem;margin-bottom:4px}
+.book-sub{font-size:.85rem;color:var(--ink-soft);margin-bottom:24px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;background:#fff;border:1px solid #cfc2a4;border-radius:12px;padding:12px 14px;color:var(--ink);transition:border-color .25s,box-shadow .25s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amber-deep);box-shadow:0 0 0 3px rgba(242,169,59,.28)}
+.field.invalid input,.field.invalid select{border-color:var(--rust-deep);box-shadow:0 0 0 3px rgba(196,80,46,.18)}
+.ferr{display:none;font-size:.75rem;color:var(--rust-deep);font-weight:700;margin-top:6px}
+.field.invalid .ferr{display:block}
+.stepper{display:flex;align-items:center;gap:0;border:1px solid #cfc2a4;border-radius:12px;background:#fff;overflow:hidden}
+.stepper button{width:46px;height:46px;border:none;background:rgba(76,143,58,.1);color:var(--moss);display:grid;place-items:center;transition:background .2s}
+.stepper button:hover{background:rgba(76,143,58,.25)}
+.stepper output{flex:1;text-align:center;font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.guide-row{display:flex;justify-content:space-between;align-items:center;background:rgba(76,143,58,.08);border:1px solid rgba(76,143,58,.25);border-radius:12px;padding:13px 16px;margin-bottom:18px}
+.guide-row .glabel{font-size:.88rem;font-weight:700;color:var(--ink)}
+.guide-row .glabel small{display:block;font-weight:500;color:var(--ink-soft);font-size:.75rem}
+.price-bar{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line-light);padding-top:18px;margin-bottom:18px}
+.price-bar .plabel{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.price-bar .pval{font-family:var(--font-d);font-size:2rem;color:var(--rust-deep);line-height:1}
+.price-bar .pval small{font-family:var(--font-b);font-size:.72rem;color:var(--ink-soft);display:block;text-align:right;font-weight:700}
+.book-submit{width:100%;justify-content:center;font-size:1rem;padding:16px}
+.book-note{font-size:.74rem;color:var(--ink-soft);text-align:center;margin-top:12px}
+
+.book-success{display:none;text-align:center;padding:14px 0 6px}
+.book-card.done form{display:none}
+.book-card.done .book-success{display:block;animation:riseIn .6s cubic-bezier(.2,.8,.2,1)}
+.check-ring{width:76px;height:76px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#8cc45e,var(--moss));display:grid;place-items:center;box-shadow:0 0 0 8px rgba(76,143,58,.15),0 10px 30px rgba(76,143,58,.35)}
+.check-ring svg{width:34px;height:34px;color:#fff}
+.check-ring path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .7s .3s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.book-success h3{font-size:1.8rem}
+.book-success .ref{display:inline-block;font-weight:700;letter-spacing:.14em;background:rgba(242,169,59,.16);border:1px dashed var(--amber-deep);color:var(--amber-deep);border-radius:9px;padding:7px 16px;margin:12px 0 18px;font-size:.9rem}
+.sum-list{text-align:left;background:#fff;border:1px solid var(--line-light);border-radius:14px;padding:16px 20px;margin-bottom:20px;font-size:.9rem}
+.sum-list div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee3cc}
+.sum-list div:last-child{border:none}
+.sum-list b{color:var(--ink)}
+.sum-list span{color:var(--ink-soft)}
+.success-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-paper{background:none;border:1px solid #cfc2a4;color:var(--ink);border-radius:99px;padding:12px 22px;font-weight:700;font-size:.88rem;display:inline-flex;gap:8px;align-items:center;transition:all .25s}
+.btn-paper:hover{border-color:var(--moss);color:var(--moss);background:rgba(76,143,58,.07)}
+.btn-paper .icon{width:15px;height:15px}
+
+/* FAQ */
+.faq{max-width:820px;margin:76px auto 0}
+.faq h2{font-size:clamp(1.7rem,3vw,2.3rem)}
+.faq-item{border-bottom:1px solid var(--line-light)}
+.faq-q{width:100%;background:none;border:none;display:flex;justify-content:space-between;align-items:center;gap:18px;text-align:left;
+  padding:20px 4px;font-family:var(--font-d);font-size:1.15rem;color:var(--ink);transition:color .25s}
+.faq-q:hover{color:var(--rust-deep)}
+.faq-q .icon{transition:transform .35s;color:var(--amber-deep);width:20px;height:20px}
+.faq-item.open .faq-q .icon{transform:rotate(180deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+.faq-a>div{overflow:hidden}
+.faq-a p{padding:0 4px 20px;color:var(--ink-soft);font-size:.93rem;max-width:64ch}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+
+/* ============ FOOTER ============ */
+footer{background:linear-gradient(180deg,#0c1810,#081209);border-top:1px solid rgba(124,194,94,.2);padding:76px 0 34px;position:relative;overflow:hidden}
+footer::before{content:"";position:absolute;left:50%;top:-140px;width:700px;height:300px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(242,169,59,.09),transparent 65%);pointer-events:none}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:44px;position:relative}
+.foot-brand p{color:var(--sage);font-size:.88rem;margin-top:14px;max-width:34ch}
+.foot-col h4{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:16px}
+.foot-col a{display:block;text-decoration:none;color:var(--sage);font-size:.9rem;padding:5px 0;transition:color .25s,transform .25s}
+.foot-col a:hover{color:var(--amber-hi);transform:translateX(4px)}
+.news p{font-size:.85rem;color:var(--sage);margin-bottom:14px}
+.news-form{display:flex;gap:8px}
+.news-form input{flex:1;min-width:0;background:rgba(18,42,25,.7);border:1px solid rgba(124,194,94,.3);border-radius:99px;padding:12px 18px;color:var(--cream);font-size:.88rem;transition:border-color .25s,box-shadow .25s}
+.news-form input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(242,169,59,.2)}
+.news-form input::placeholder{color:#7a8f76}
+.news-form button{flex:none}
+.news-ok{display:none;align-items:center;gap:10px;color:var(--ok);font-weight:700;font-size:.9rem;background:rgba(124,194,94,.1);border:1px solid rgba(124,194,94,.35);border-radius:14px;padding:14px 18px}
+.news.done .news-form{display:none}
+.news.done .news-ok{display:flex;animation:riseIn .5s}
+.news-err{font-size:.75rem;color:var(--danger);font-weight:700;margin-top:8px;display:none}
+.news-err.show{display:block}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid rgba(124,194,94,.14);margin-top:56px;padding-top:26px;font-size:.78rem;color:#7a8f76}
+.top-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid rgba(124,194,94,.3);color:var(--sage);border-radius:99px;padding:9px 18px;font-size:.78rem;font-weight:700;transition:all .25s}
+.top-btn:hover{color:var(--amber-hi);border-color:var(--amber);transform:translateY(-3px)}
+.top-btn .icon{width:14px;height:14px;transform:rotate(-90deg)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1024px){
+  .practice-grid{grid-template-columns:1fr;gap:44px}
+  .practice-left{position:static}
+  .seasons-grid{grid-template-columns:1fr}
+  .visit-grid{grid-template-columns:1fr;gap:44px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .contours{width:90%;opacity:.35}
+}
+@media (max-width:860px){
+  .nav-links{display:none}
+  .burger{display:block}
+  .nav .btn-primary{display:none}
+  .sound .sLabel{display:none}
+  .sect{padding:84px 0}
+  .heroContent{left:24px;right:24px;bottom:9%}
+  .scrollCue{display:none}
+  .modal-body{padding:8px 22px 26px}
+}
+@media (max-width:560px){
+  .frow{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .stat b{font-size:2rem}
+  .book-card{padding:24px 20px}
+  .controls{padding:22px 18px}
+  .foot-grid{grid-template-columns:1fr}
+  .ritual{padding:22px 20px}
+  .ritual .num{min-width:46px;font-size:2rem}
+  .scene-caption{flex-direction:column;align-items:flex-start}
+  .heroMeta .chip:nth-child(3){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+  .reveal{opacity:1;transform:none}
+  .heroContent>*,.scrollCue{opacity:1;animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ICON SPRITE -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C7 7 4 12 6 17c2 4 8 5 12 1-5 1-8-1-9-4C8 10 9 6 12 2z"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 19c6 0 4-7 9-7 4 0 3-6 5-7M5 19h.01M19 5h.01"/><circle cx="5" cy="19" r="2" fill="currentColor"/><circle cx="19" cy="5" r="2" fill="currentColor"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 7v5l3 3"/></symbol>
+    <symbol id="i-mountain" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 19L10 6l4 7 3-4 4 10z"/></symbol>
+    <symbol id="i-arrowR" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15m-6-7l7 7-7 7"/></symbol>
+    <symbol id="i-arrowL" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M20 12H5m6-7l-7 7 7 7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9c1.5 1.5 1.5 4.5 0 6M18.5 6.5c3 3 3 8 0 11"/></symbol>
+    <symbol id="i-soundoff" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 9l5 6m0-6l-5 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M4 12.5l5.5 5.5L20 6.5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3.5 10h17M8 3v4m8-4v4"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m-5-4l5 5 5-5M4 20h16"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7l8 6 8-6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
+    <symbol id="i-steps" viewBox="0 0 24 24"><ellipse cx="8" cy="7" rx="3" ry="4.4" fill="currentColor" transform="rotate(-14 8 7)"/><ellipse cx="16" cy="15" rx="3" ry="4.4" fill="currentColor" transform="rotate(12 16 15)"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.4" fill="currentColor"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2.5v3m0 13v3M2.5 12h3m13 0h3M5 5l2.1 2.1M16.9 16.9L19 19M19 5l-2.1 2.1M7.1 16.9L5 19"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3.5 20c0-3.3 2.5-5.5 5.5-5.5s5.5 2.2 5.5 5.5M16 5.2a3.4 3.4 0 010 6.4M17.5 14.8c2 .8 3.2 2.7 3.2 5.2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M5 12h14"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path fill="currentColor" d="M4 13c0-4 2.5-7 6-8l.8 1.6C8.6 7.6 7.4 9.2 7.2 11H10v7H4v-5zm10 0c0-4 2.5-7 6-8l.8 1.6c-2.2 1-3.4 2.6-3.6 4.4H20v7h-6v-5z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#practice">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="Stillwood home">
+      <span class="brand-mark"><svg style="color:var(--amber-hi)"><use href="#i-leaf"/></svg></span>
+      Stillwood
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#practice">The Practice</a>
+      <a href="#trails">Trails</a>
+      <a href="#seasons">Seasons</a>
+      <a href="#voices">Voices</a>
+      <a href="#visit">Visit</a>
+    </div>
+    <div class="nav-actions">
+      <button class="sound" id="soundBtn" aria-pressed="true" title="Forest ambience — birds, wind, and falling leaves">
+        <svg class="icon"><use id="soundIcon" href="#i-sound"/></svg>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="sLabel">Ambience</span>
+      </button>
+      <a class="btn btn-primary btn-sm" href="#visit">Reserve a walk</a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="progress" id="progress"></div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <a href="#practice">The Practice <svg class="icon"><use href="#i-arrowR"/></svg></a>
+  <a href="#trails">Trails <svg class="icon"><use href="#i-arrowR"/></svg></a>
+  <a href="#seasons">Seasons <svg class="icon"><use href="#i-arrowR"/></svg></a>
+  <a href="#voices">Voices <svg class="icon"><use href="#i-arrowR"/></svg></a>
+  <a href="#visit">Visit <svg class="icon"><use href="#i-arrowR"/></svg></a>
+  <a class="btn btn-primary" href="#visit">Reserve a walk</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="sceneWrap">
+      <div class="scene" data-season="autumn" id="heroScene" aria-hidden="true"></div>
+      <canvas id="heroFx" aria-hidden="true"></canvas>
+      <div class="heroScrim"></div>
+    </div>
+    <div class="heroContent">
+      <span class="eyebrow">Stillwood · Forest Bathing Sanctuary</span>
+      <h1>Walk until the noise<br><em>forgets your name.</em></h1>
+      <p>Nine slow trails through 214 hectares of old growth in the Cascade foothills. No engines, no schedules — just light, moss, and time.</p>
+      <div class="ctaRow">
+        <a class="btn btn-primary" href="#visit">Reserve a walk <svg class="icon"><use href="#i-arrowR"/></svg></a>
+        <a class="btn btn-ghost" href="#trails">Wander the trails</a>
+      </div>
+      <div class="heroMeta">
+        <span class="chip"><svg class="icon"><use href="#i-clock"/></svg> Open dawn – dusk</span>
+        <span class="chip"><svg class="icon"><use href="#i-pin"/></svg> 47.61° N, 121.94° W</span>
+        <span class="chip"><svg class="icon"><use href="#i-leaf"/></svg> Protected since 1987</span>
+      </div>
+    </div>
+    <a class="scrollCue" href="#practice">Begin the descent<span class="line"></span></a>
+  </header>
+
+  <!-- PRACTICE -->
+  <section class="sect" id="practice">
+    <div class="glowfield" aria-hidden="true"></div>
+    <svg class="contours" viewBox="0 0 600 600" aria-hidden="true" fill="none" stroke="#7cc25e" stroke-opacity=".09" stroke-width="1.4">
+      <path d="M60 300c0-130 110-230 240-230s240 100 240 230-110 230-240 230S60 430 60 300z"/>
+      <path d="M110 300c0-104 88-184 190-184s190 80 190 184-88 184-190 184-190-80-190-184z"/>
+      <path d="M160 300c0-78 66-138 140-138s140 60 140 138-66 138-140 138-140-60-140-138z"/>
+      <path d="M210 300c0-50 42-92 90-92s90 42 90 92-42 92-90 92-90-42-90-92z"/>
+      <path d="M255 300c0-26 20-48 45-48s45 22 45 48-20 48-45 48-45-22-45-48z"/>
+    </svg>
+    <div class="wrap practice-grid">
+      <div class="practice-left">
+        <span class="eyebrow reveal">The Practice</span>
+        <h2 class="reveal" style="--d:.08s">Shinrin-yoku,<br>spoken in cedar.</h2>
+        <p class="dropcap reveal" style="--d:.16s">Forest bathing is not hiking. It is the deliberate act of being unhurried among trees — letting the canopy filter the light and, with it, whatever you carried through the gate. The Japanese call it <em>shinrin-yoku</em>. Our guides call it Tuesday.</p>
+        <p class="reveal" style="--d:.24s">Stillwood has been left largely alone since 1987. The trails were laid by hand, the creek was never dammed, and the loudest thing you will hear all morning is a varied thrush working the far ridge.</p>
+        <div class="stats">
+          <div class="stat reveal" style="--d:.1s"><b>214</b><span>hectares protected</span></div>
+          <div class="stat reveal" style="--d:.18s"><b>9</b><span>hand-laid trails</span></div>
+          <div class="stat reveal" style="--d:.26s"><b>140</b><span>yrs · oldest cedar</span></div>
+          <div class="stat reveal" style="--d:.34s"><b>0</b><span>engines allowed</span></div>
+        </div>
+      </div>
+      <div class="practice-right">
+        <div class="ritual reveal" style="--d:.1s">
+          <span class="num">01</span>
+          <div><h3><svg class="icon"><use href="#i-steps"/></svg>Arrive</h3>
+          <p>Leave the phone in the cedar locker at the gate. The first ten minutes of every walk are silent — long enough for your pulse to find the forest's tempo.</p></div>
+        </div>
+        <div class="ritual reveal" style="--d:.2s">
+          <span class="num">02</span>
+          <div><h3><svg class="icon"><use href="#i-clock"/></svg>Slow</h3>
+          <p>Guides walk at roughly one kilometre an hour. Speed is the only thing we ask you to give up. Most walkers stop checking the time by the second bend.</p></div>
+        </div>
+        <div class="ritual reveal" style="--d:.3s">
+          <span class="num">03</span>
+          <div><h3><svg class="icon"><use href="#i-eye"/></svg>Notice</h3>
+          <p>Five senses, one at a time. Bark, then birdsong, then the smell of rain that fell three days ago. Most people say the light through the mist is what they carry home.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAILS -->
+  <section class="sect" id="trails">
+    <div class="wrap">
+      <div class="trails-head">
+        <div>
+          <span class="eyebrow reveal">The Trails</span>
+          <h2 class="reveal" style="--d:.08s">Four ways into the quiet.</h2>
+          <p class="lead reveal" style="--d:.16s">Every trail begins at the cedar gate and returns to it. Choose by mood, not by fitness — the forest rewards the slowest walker in the group.</p>
+        </div>
+        <div class="filters reveal" style="--d:.2s" role="group" aria-label="Filter trails by difficulty">
+          <button class="fbtn" data-f="all" aria-pressed="true">All</button>
+          <button class="fbtn" data-f="gentle" aria-pressed="false">Gentle</button>
+          <button class="fbtn" data-f="moderate" aria-pressed="false">Moderate</button>
+          <button class="fbtn" data-f="wild" aria-pressed="false">Wild</button>
+          <span class="fcount" id="fcount">4 trails</span>
+        </div>
+      </div>
+      <div class="trail-grid" id="trailGrid"></div>
+    </div>
+  </section>
+
+  <!-- SEASONS -->
+  <section class="sect" id="seasons">
+    <div class="glowfield" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="eyebrow reveal">The Living Scene</span>
+      <h2 class="reveal" style="--d:.08s">Choose your light.</h2>
+      <p class="lead reveal" style="--d:.16s">The same path, four temperaments. Move the sun, thicken the mist, thin the canopy — then take the scene home with you.</p>
+      <div class="seasons-grid">
+        <div class="scene-panel reveal" style="--d:.2s">
+          <div class="scene-stage">
+            <div class="scene" data-season="autumn" id="seasonScene" aria-label="Interactive forest scene"></div>
+          </div>
+          <div class="scene-caption">
+            <div>
+              <div class="cap-name" id="capName">The amber hour.</div>
+              <div class="cap-note" id="capNote">Low sun, first litter on the path.</div>
+            </div>
+            <button class="dl-btn" id="dlScene"><svg class="icon"><use href="#i-download"/></svg><span>Download scene</span></button>
+          </div>
+        </div>
+        <div class="controls reveal" style="--d:.3s">
+          <h3>Shape the morning</h3>
+          <p class="hint">Everything applies live — this is the valley, adjustable.</p>
+          <div class="season-chips" role="group" aria-label="Season">
+            <button class="schip" data-season="spring" aria-pressed="false"><i style="color:#b8dc6a;background:#b8dc6a"></i>Spring</button>
+            <button class="schip" data-season="summer" aria-pressed="false"><i style="color:#4c8f3a;background:#4c8f3a"></i>Summer</button>
+            <button class="schip" data-season="autumn" aria-pressed="true"><i style="color:#f2a93b;background:#f2a93b"></i>Autumn</button>
+            <button class="schip" data-season="winter" aria-pressed="false"><i style="color:#b8cfc0;background:#b8cfc0"></i>Winter</button>
+          </div>
+          <div class="ctl">
+            <div class="ctl-row"><label for="ctlLight">Sun height</label><output id="outLight">62</output></div>
+            <input type="range" id="ctlLight" min="0" max="100" value="62">
+          </div>
+          <div class="ctl">
+            <div class="ctl-row"><label for="ctlMist">Mist</label><output id="outMist">55</output></div>
+            <input type="range" id="ctlMist" min="0" max="100" value="55">
+          </div>
+          <div class="ctl">
+            <div class="ctl-row"><label for="ctlCanopy">Canopy</label><output id="outCanopy">85</output></div>
+            <input type="range" id="ctlCanopy" min="10" max="100" value="85">
+          </div>
+          <div class="ctl">
+            <div class="ctl-row"><label for="ctlGlow">Light bloom</label><output id="outGlow">70</output></div>
+            <input type="range" id="ctlGlow" min="10" max="100" value="70">
+          </div>
+          <div class="switchrow">
+            <span>Drifting mist</span>
+            <span class="switch"><input type="checkbox" id="ctlDrift" checked aria-label="Drifting mist animation"><span class="track"></span></span>
+          </div>
+          <div class="ctl-actions">
+            <button class="reset-btn" id="ctlReset">Reset to the amber hour</button>
+          </div>
+          <p class="season-note" id="seasonNote">The whole valley smells of cedar and warm paper. This is the light in our photographs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICES -->
+  <section class="sect" id="voices">
+    <div class="glowfield" aria-hidden="true"></div>
+    <div class="wrap">
+      <div style="text-align:center">
+        <span class="eyebrow reveal" style="justify-content:center">Voices from the path</span>
+        <h2 class="reveal" style="--d:.08s">What walkers carry home.</h2>
+      </div>
+      <div class="voices-box reveal" style="--d:.16s" id="voicesBox" aria-roledescription="carousel" aria-label="Walker testimonials">
+        <svg class="qmark" aria-hidden="true"><use href="#i-quote"/></svg>
+        <div class="voices-stack" id="voicesStack"></div>
+        <div class="voice-nav">
+          <button class="vnav" id="vPrev" aria-label="Previous testimonial"><svg class="icon"><use href="#i-arrowL"/></svg></button>
+          <div class="dots" id="vDots" role="tablist" aria-label="Choose testimonial"></div>
+          <button class="vnav" id="vNext" aria-label="Next testimonial"><svg class="icon"><use href="#i-arrowR"/></svg></button>
+        </div>
+        <div class="vprogress" aria-hidden="true"><i id="vBar"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="sect" id="visit">
+    <div class="wrap">
+      <span class="eyebrow reveal">Plan your visit</span>
+      <h2 class="reveal" style="--d:.08s">The gate opens at first light.</h2>
+      <p class="lead reveal" style="--d:.16s">Reserve below and we'll hold a locker, a map, and — if you ask for one — a guide who knows where the thrush nests.</p>
+      <div class="visit-grid">
+        <div class="reveal" style="--d:.2s">
+          <div class="info-block">
+            <h3><svg class="icon"><use href="#i-pin"/></svg>Finding us</h3>
+            <p style="color:var(--ink-soft);font-size:.92rem;margin-bottom:12px">Hollow Creek Valley, Cascade foothills.<br>Forest Road 27, end of the pavement.<br>The last 4 km are gravel — drive it slowly, it's part of the walk.</p>
+            <a class="coords" href="https://www.openstreetmap.org/#map=13/47.61/-121.94" target="_blank" rel="noopener"><svg class="icon" style="width:14px;height:14px"><use href="#i-pin"/></svg>47.61° N, 121.94° W — open map</a>
+          </div>
+          <div class="info-block">
+            <h3><svg class="icon"><use href="#i-clock"/></svg>Hours of the gate</h3>
+            <table class="hours">
+              <tr><td>Dawn entry</td><td>from 6:00</td></tr>
+              <tr><td>Guided walks</td><td>6:30 · 9:00 · 17:30</td></tr>
+              <tr><td>Last entry</td><td>17:30</td></tr>
+              <tr><td>Dusk close (summer)</td><td>20:00</td></tr>
+            </table>
+          </div>
+          <div class="info-block">
+            <h3><svg class="icon"><use href="#i-leaf"/></svg>Good to know</h3>
+            <ul class="know">
+              <li><svg class="icon"><use href="#i-check"/></svg>Phone lockers and rain ponchos are free at the gate.</li>
+              <li><svg class="icon"><use href="#i-check"/></svg>Groups are capped at eight walkers, always.</li>
+              <li><svg class="icon"><use href="#i-check"/></svg>Every reservation plants one native seedling.</li>
+              <li><svg class="icon"><use href="#i-check"/></svg>Free cancellation until 24 hours before your walk.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="book-card reveal" style="--d:.28s" id="bookCard">
+          <form id="bookForm" novalidate>
+            <h3>Reserve a walk</h3>
+            <p class="book-sub">Held for 48 hours · pay at the gate · one seedling per booking</p>
+            <div class="frow">
+              <div class="field" id="fName">
+                <label for="inName">Your name</label>
+                <input id="inName" type="text" autocomplete="name" placeholder="Rowan Ashford">
+                <p class="ferr">Please tell us who's walking.</p>
+              </div>
+              <div class="field" id="fEmail">
+                <label for="inEmail">Email</label>
+                <input id="inEmail" type="email" autocomplete="email" placeholder="you@somewhere.quiet">
+                <p class="ferr">That email doesn't look right.</p>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="field" id="fDate">
+                <label for="inDate">Date</label>
+                <input id="inDate" type="date">
+                <p class="ferr">Pick a day from today onward.</p>
+              </div>
+              <div class="field">
+                <label for="inTime">Session</label>
+                <select id="inTime">
+                  <option value="06:30">Dawn — 6:30</option>
+                  <option value="09:00" selected>Morning — 9:00</option>
+                  <option value="17:30">Golden hour — 17:30</option>
+                </select>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="field" id="fTrail">
+                <label for="inTrail">Trail</label>
+                <select id="inTrail"></select>
+                <p class="ferr">Choose a trail to walk.</p>
+              </div>
+              <div class="field">
+                <label id="gLabel">Walkers</label>
+                <div class="stepper" role="group" aria-labelledby="gLabel">
+                  <button type="button" id="gMinus" aria-label="Fewer walkers"><svg class="icon"><use href="#i-minus"/></svg></button>
+                  <output id="gCount" aria-live="polite">2</output>
+                  <button type="button" id="gPlus" aria-label="More walkers"><svg class="icon"><use href="#i-plus"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <div class="guide-row">
+              <span class="glabel">Walk with a guide<small>+ $24 · knows every thrush by name</small></span>
+              <span class="switch"><input type="checkbox" id="inGuided" checked aria-label="Walk with a guide"><span class="track"></span></span>
+            </div>
+            <div class="price-bar">
+              <span class="plabel">Total at the gate</span>
+              <span class="pval"><span id="priceVal">$96</span><small id="priceBreak">2 walkers · guided</small></span>
+            </div>
+            <button type="submit" class="btn btn-primary book-submit">Hold my place <svg class="icon"><use href="#i-arrowR"/></svg></button>
+            <p class="book-note">No payment now. The forest trusts you.</p>
+          </form>
+
+          <div class="book-success" aria-live="polite">
+            <div class="check-ring"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 6.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>The forest expects you.</h3>
+            <span class="ref" id="bkRef">SW-000000</span>
+            <div class="sum-list" id="bkSummary"></div>
+            <p style="font-size:.85rem;color:var(--ink-soft);margin-bottom:20px" id="bkMail">A confirmation is on its way.</p>
+            <div class="success-actions">
+              <button class="btn-paper" id="bkIcs"><svg class="icon"><use href="#i-cal"/></svg>Add to calendar</button>
+              <button class="btn-paper" id="bkAgain"><svg class="icon"><use href="#i-leaf"/></svg>Plan another walk</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq">
+        <span class="eyebrow reveal">Before you ask</span>
+        <h2 class="reveal" style="--d:.08s">Quiet questions.</h2>
+        <div id="faqList">
+          <div class="faq-item reveal" style="--d:.1s">
+            <button class="faq-q" aria-expanded="false">What exactly is forest bathing?<svg class="icon"><use href="#i-chev"/></svg></button>
+            <div class="faq-a"><div><p>A slow, sensory walk with no destination pressure — the practice of <em>shinrin-yoku</em>, developed in Japan in the 1980s. Studies link it to lower cortisol and blood pressure. We link it to noticing things you'd otherwise miss.</p></div></div>
+          </div>
+          <div class="faq-item reveal" style="--d:.16s">
+            <button class="faq-q" aria-expanded="false">Do I need to be fit?<svg class="icon"><use href="#i-chev"/></svg></button>
+            <div class="faq-a"><div><p>No. The slowest walker sets the pace, and Gentle trails are wheelchair-friendly for their first kilometre. If you can walk to a kettle, you can walk with us.</p></div></div>
+          </div>
+          <div class="faq-item reveal" style="--d:.22s">
+            <button class="faq-q" aria-expanded="false">What if it rains?<svg class="icon"><use href="#i-chev"/></svg></button>
+            <div class="faq-a"><div><p>We walk in rain — it's the forest's best voice, and the moss turns almost luminous. Ponchos wait at the gate. Only lightning closes the trails, and then we reschedule you free of charge.</p></div></div>
+          </div>
+          <div class="faq-item reveal" style="--d:.28s">
+            <button class="faq-q" aria-expanded="false">Can children join?<svg class="icon"><use href="#i-chev"/></svg></button>
+            <div class="faq-a"><div><p>Walkers aged 8 and up are welcome on Gentle trails, and they're usually the best noticers in the group. The Dawn session is adults-only — it's the quietest hour we have.</p></div></div>
+          </div>
+          <div class="faq-item reveal" style="--d:.34s">
+            <button class="faq-q" aria-expanded="false">Are dogs allowed?<svg class="icon"><use href="#i-chev"/></svg></button>
+            <div class="faq-a"><div><p>Leashed dogs are welcome on the Fern Hollow Loop before 10:00, when the ground-nesting birds are least disturbed. Everywhere else, the forest belongs to its residents.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="brand-mark"><svg style="color:var(--amber-hi)"><use href="#i-leaf"/></svg></span>Stillwood</a>
+        <p>A forest bathing sanctuary in the Cascade foothills. Held in trust, walked slowly, since 1987.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="#practice">The Practice</a>
+        <a href="#trails">Trails</a>
+        <a href="#seasons">Seasons</a>
+        <a href="#voices">Voices</a>
+        <a href="#visit">Plan a visit</a>
+      </div>
+      <div class="foot-col">
+        <h4>Reach us</h4>
+        <a href="mailto:hello@stillwood.example">hello@stillwood.example</a>
+        <a href="tel:+14255550187">+1 (425) 555-0187</a>
+        <a href="https://www.openstreetmap.org/#map=13/47.61/-121.94" target="_blank" rel="noopener">Forest Road 27 ↗</a>
+      </div>
+      <div class="foot-col news" id="newsBox">
+        <h4>Field notes</h4>
+        <p>One letter a month: what bloomed, what returned, where the light fell best.</p>
+        <form class="news-form" id="newsForm" novalidate>
+          <input type="email" id="newsEmail" placeholder="your@email.com" aria-label="Email for field notes">
+          <button class="btn btn-primary btn-sm" type="submit">Join</button>
+        </form>
+        <p class="news-err" id="newsErr">Please enter a valid email.</p>
+        <div class="news-ok"><svg class="icon"><use href="#i-check"/></svg>You're on the list. See you at first light.</div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Stillwood Trust · Built quietly, at one kilometre an hour.</span>
+      <button class="top-btn" id="topBtn">Back to the canopy <svg class="icon"><use href="#i-arrowR"/></svg></button>
+    </div>
+  </div>
+</footer>
+
+<!-- TRAIL MODAL -->
+<div class="modal" id="trailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-scrim" id="modalScrim"></div>
+  <div class="modal-panel">
+    <button class="modal-close" id="modalClose" aria-label="Close trail details"><svg class="icon"><use href="#i-x"/></svg></button>
+    <div class="modal-mini" id="modalMini"></div>
+    <div class="modal-body">
+      <div class="trail-top"><h3 id="modalTitle"></h3><span class="dchip" id="modalChip"></span></div>
+      <div class="tstats" id="modalStats"></div>
+      <p id="modalDesc1"></p>
+      <p id="modalDesc2"></p>
+      <ul class="notices" id="modalNotices"></ul>
+      <div class="modal-foot">
+        <span class="mprice"><small>Per walker</small><span id="modalPrice"></span></span>
+        <button class="btn btn-primary" id="modalReserve">Reserve this trail <svg class="icon"><use href="#i-arrowR"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const $=(s,c)=>(c||document).querySelector(s);
+const $$=(s,c)=>Array.from((c||document).querySelectorAll(s));
+const RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function mulberry32(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ================= DATA ================= */
+const TRAILS=[
+ {id:'amber',name:'The Amber Walk',diff:'gentle',diffLabel:'Gentle',km:'1.8 km',time:'45 min',ascent:'+30 m',price:28,
+  blurb:'The photographed path: low sun, first litter, cedar and warm paper.',
+  d1:'This is the path in every Stillwood photograph, and it earns it. The trail follows the valley floor where the canopy opens just enough for the morning sun to fall in long, visible shafts.',
+  d2:'In early autumn the first maple leaves land on the packed earth, and the whole walk smells of cedar and warm paper. Benches face the light at three bends; most walkers use all of them.',
+  notices:['Sunbeams through the gap at the second bend, 7–9 am','The 140-year cedar leans over the path at 600 m','Best light: first two weeks of October'],
+  pal:{skyA:'#3a2f16',skyB:'#6b4a1e',sun:'#ffd98a',trunk:'#3a2c1c',leaf:'#b4862c',ground:'#2e2416',path:'#7a5a30',mist:'#e8d9b0',mistOp:.45}},
+ {id:'fern',name:'Fern Hollow Loop',diff:'gentle',diffLabel:'Gentle',km:'2.6 km',time:'1 h',ascent:'+55 m',price:28,
+  blurb:'Sword ferns to the shoulder, a creek you hear before you see.',
+  d1:'The hollow holds moisture like a cupped hand, so the sword ferns grow to shoulder height and stay green through August. You will hear Hollow Creek for ten minutes before you finally see it.',
+  d2:'The loop crosses the creek twice on cedar bridges wide enough to stop on. Leashed dogs are welcome here before 10:00 — after that, the ground-nesters take priority.',
+  notices:['Eleven identifiable shades of green (children have counted)','Two creek crossings on wide cedar bridges','The nurse-log at 1.2 km, sprouting a hemlock nursery'],
+  pal:{skyA:'#14301c',skyB:'#2e5a2c',sun:'#eaf2c0',trunk:'#2e3a24',leaf:'#4c8f3a',ground:'#16301a',path:'#4a5a34',mist:'#cfe3c9',mistOp:.5}},
+ {id:'mist',name:'Mistline Ridge',diff:'moderate',diffLabel:'Moderate',km:'4.2 km',time:'1 h 40',ascent:'+180 m',price:36,
+  blurb:'Climb through the mist layer and look down on weather.',
+  d1:'The ridge trail climbs steadily through the valley\u2019s morning mist layer — usually somewhere around 140 metres — and then, quite suddenly, you are above it, looking down on weather.',
+  d2:'There are two viewpoints, both facing east. Guides time the dawn session so the group reaches the second one as the sun clears the Cascades. Bring a layer; the ridge keeps its own climate.',
+  notices:['The inversion viewpoint — stand above the mist','Varied thrush territory on the upper switchbacks','Dawn session timed to sunrise at the second viewpoint'],
+  pal:{skyA:'#1c3038',skyB:'#3a5a60',sun:'#f2ead0',trunk:'#2a3a3a',leaf:'#5d8a7a',ground:'#1e3034',path:'#4a5a58',mist:'#dfe9e6',mistOp:.8}},
+ {id:'old',name:'The Old Growth',diff:'wild',diffLabel:'Wild',km:'6.5 km',time:'2 h 30',ascent:'+260 m',price:54,
+  blurb:'The deep quiet: 140-year cedars, no markers, guide required.',
+  d1:'Beyond the last marker the forest changes register. The cedars here were seedlings before the valley had a road, and the silence has a weight you can feel on your shoulders — in the good way.',
+  d2:'This walk is guided only, capped at six, and moves at the pace of the slowest breath in the group. It ends at the great cedar, where guides stop talking entirely for the final ten minutes.',
+  notices:['The great cedar — 140 years, 4.1 m through the base','Ten minutes of complete shared silence at the end','Guided only · maximum six walkers'],
+  pal:{skyA:'#101f14',skyB:'#1e3a20',sun:'#f2a93b',trunk:'#241a10',leaf:'#2f6b2c',ground:'#0e1c10',path:'#3c2c1e',mist:'#b8cfc0',mistOp:.3}}
+];
+const VOICES=[
+ {q:'I came to walk off a bad year. Two hours in, I realised I hadn\u2019t thought about it once. The light does something to you here.',who:'Mara E.',meta:'Portland · The Amber Walk'},
+ {q:'Our guide stopped us to listen to a single woodpecker for four minutes. It was the longest, fullest four minutes of my month.',who:'Daniel & Priya K.',meta:'Seattle · Guided Old Growth'},
+ {q:'I run marathons. This was the first place in years that made me want to move slower than everyone else.',who:'Tomás R.',meta:'Vancouver · Mistline Ridge'},
+ {q:'My daughter counted eleven kinds of green on the Fern Loop. She\u2019s six. She was right.',who:'June W.',meta:'Bellingham · Fern Hollow Loop'}
+];
+const SEASONS={
+ spring:{name:'The forest exhales.',note:'Trillium opens on the hollow floor and every branch is a bird\u2019s front door. Walk softly — everything here is new.',canopy:.9,mist:50},
+ summer:{name:'Green upon green.',note:'The canopy closes overhead and the light turns submarine. Long days, deep shade, the creek running low and clear.',canopy:1,mist:30},
+ autumn:{name:'The amber hour.',note:'The whole valley smells of cedar and warm paper. This is the light in our photographs.',canopy:.95,mist:55},
+ winter:{name:'The quiet architecture.',note:'Bare branches draw the sky. Mist pools in the hollow like held breath, and every sound arrives twice.',canopy:.24,mist:80}
+};
+
+/* ================= SCENE BUILDER ================= */
+function makeScene(px){
+ const rand=mulberry32(11),r=(a,b)=>a+rand()*(b-a),pick=a=>a[(rand()*a.length)|0];
+ let canopy='';
+ for(let i=0;i<30;i++){let x,y,t=0;
+   do{x=r(-40,1640);y=r(-70,250);t++}while(Math.hypot(x-1010,y-165)<185&&t<24);
+   const near=Math.hypot(x-1010,y-165)<400;
+   const cls=near?'f-leafA':pick(['f-leafB','f-leafB','f-leafC']);
+   canopy+=`<ellipse class="${cls}" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${r(80,190).toFixed(0)}" ry="${r(45,105).toFixed(0)}" opacity="${r(.7,.95).toFixed(2)}"/>`;}
+ for(let i=0;i<12;i++){const a=r(0,Math.PI*2),rad=r(195,265),x=1010+Math.cos(a)*rad,y=165+Math.sin(a)*rad*.62;
+   if(y>320)continue;
+   canopy+=`<ellipse class="f-leafA" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${r(50,110).toFixed(0)}" ry="${r(30,60).toFixed(0)}" opacity=".88"/>`;}
+ let far='';
+ [240,335,470,610,725,880,985,1120,1265,1385].forEach(x=>{const w=r(10,22),t=r(150,225),b=r(560,645),l=r(-14,14);
+   far+=`<path class="f-far" d="M${x} ${t.toFixed(0)} L${(x+w).toFixed(0)} ${t.toFixed(0)} L${(x+w+l).toFixed(0)} ${b.toFixed(0)} L${(x+l).toFixed(0)} ${b.toFixed(0)} Z" opacity="${r(.35,.6).toFixed(2)}"/>`;});
+ let mid='';
+ [[360,44,-26,70,660],[540,36,18,110,640],[690,30,-10,150,600],[930,34,22,130,610],[1105,48,-30,60,680],[1250,40,14,90,700]].forEach(m=>{
+   const[x,w,l,t,b]=m;
+   mid+=`<path fill="url(#${px}-trunk)" d="M${x} ${t} L${x+w} ${t} L${x+w+l} ${b} L${x+l} ${b} Z" opacity=".88"/>`;
+   mid+=`<use href="#${px}-moss" transform="translate(${x+l-6} ${b-70}) scale(.55)" opacity=".8"/>`;});
+ mid+=`<path class="f-branch" d="M380 130 C 470 90 540 70 640 60" fill="none" stroke-width="12" stroke-linecap="round" opacity=".8"/>`;
+ mid+=`<path class="f-branch" d="M1120 120 C 1040 80 980 60 900 55" fill="none" stroke-width="11" stroke-linecap="round" opacity=".8"/>`;
+ let litter='';
+ for(let i=0;i<46;i++){const y=r(560,995),k=(y-520)/480,half=46+k*354,center=806-26*k,side=rand()<.5?-1:1;
+   const x=center+side*half*r(.55,1.05),s=(.5+k*1.1)*r(.7,1.3),cls=pick(['f-litterA','f-litterA','f-litterB','f-litterC']);
+   litter+=`<use href="#${px}-leaf" class="${cls}" transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) rotate(${r(0,360).toFixed(0)}) scale(${s.toFixed(2)})" opacity="${r(.6,.95).toFixed(2)}"/>`;}
+ let peb='';
+ for(let i=0;i<22;i++){const y=r(640,990),k=(y-520)/480,half=46+k*354,x=806-26*k+r(-half*.7,half*.7);
+   peb+=`<circle class="f-pebble" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${r(1.5,3.4).toFixed(1)}" opacity="${r(.25,.5).toFixed(2)}"/>`;}
+ let sparks='';
+ [[640,470],[760,560],[880,430],[960,620],[700,660]].forEach((p,i)=>{sparks+=`<circle class="spark s${i}" cx="${p[0]}" cy="${p[1]}" r="2.6"/>`;});
+ const fern=(x,y,s,rot,cls,flip)=>`<use href="#${px}-frond" class="${cls}" transform="translate(${x} ${y}) rotate(${rot}) scale(${flip?-s:s} ${s})"/>`;
+ let under=fern(150,1005,2.3,-14,'f-fernA')+fern(215,1010,1.9,10,'f-fernB')+fern(95,1010,1.7,-30,'f-fernB')+fern(300,1005,1.4,22,'f-fernA')+fern(420,1000,1.15,8,'f-fernB')
+   +fern(1450,1005,2.4,14,'f-fernA',true)+fern(1385,1010,1.9,-8,'f-fernB',true)+fern(1510,1010,1.8,28,'f-fernB',true)+fern(1300,1005,1.4,-20,'f-fernA',true)+fern(1180,1000,1.1,-6,'f-fernB',true);
+ const flower=(x,y,s)=>{let f=`<path class="f-stem" d="M${x} ${y} C ${x-4} ${y-16} ${x+3} ${y-30} ${x} ${y-42}" fill="none" stroke-width="2.4"/>`;
+   for(let k=0;k<5;k++){const a=k/5*Math.PI*2;f+=`<circle class="f-flower" cx="${(x+Math.cos(a)*5*s).toFixed(1)}" cy="${(y-42+Math.sin(a)*5*s).toFixed(1)}" r="${(3.4*s).toFixed(1)}"/>`;}
+   return f+`<circle class="f-flowerCore" cx="${x}" cy="${y-42}" r="${(2.6*s).toFixed(1)}"/>`;};
+ [[1245,955,1],[1290,930,.85],[1338,962,1.1],[1392,935,.9],[1430,965,1],[1265,985,.8],[262,965,.8],[300,940,.7],[232,990,.9]].forEach(p=>{under+=flower(p[0],p[1],p[2]);});
+ let rayStr='';
+ [[300,430],[520,680],[760,900],[1020,1120],[1180,1260]].forEach((p,i)=>{
+   rayStr+=`<polygon class="ray r${i}" points="1003,128 1017,128 ${p[1]},1000 ${p[0]},1000" fill="url(#${px}-ray)" filter="url(#${px}-soft2)"/>`;});
+ const tree=`<path fill="url(#${px}-trunk)" d="M96 0 L212 0 C 202 240 218 520 260 780 C 278 902 302 962 338 1000 L 42 1000 C 86 942 102 862 110 762 C 124 522 110 242 96 0 Z"/>
+  <path class="f-bark" d="M150 20 C 144 300 152 600 176 940" fill="none" stroke-width="3" opacity=".5"/>
+  <path class="f-bark" d="M185 10 C 180 280 190 560 216 900" fill="none" stroke-width="3" opacity=".45"/>
+  <path class="f-bark" d="M120 60 C 116 320 122 640 140 960" fill="none" stroke-width="2.5" opacity=".4"/>
+  <path class="f-branch" d="M170 120 C 260 70 340 40 430 26" fill="none" stroke-width="22" stroke-linecap="round"/>
+  <path class="f-branch" d="M150 60 C 210 20 260 -10 320 -30" fill="none" stroke-width="16" stroke-linecap="round"/>
+  <use href="#${px}-moss" transform="translate(196 300) scale(1.15 2.1)"/>
+  <use href="#${px}-moss" transform="translate(210 620) scale(1.3 2.4)"/>
+  <use href="#${px}-moss" transform="translate(238 880) scale(1.5 1.9)"/>
+  <use href="#${px}-moss" transform="translate(120 820) scale(.9 1.6)" opacity=".8"/>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+ <defs>
+  <linearGradient id="${px}-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-skyTop"/><stop offset="1" class="s-skyBot"/></linearGradient>
+  <radialGradient id="${px}-sun" cx="63%" cy="26%" r="52%"><stop offset="0" class="s-sunCore" stop-opacity=".95"/><stop offset=".35" class="s-sunHalo" stop-opacity=".5"/><stop offset="1" class="s-sunHalo" stop-opacity="0"/></radialGradient>
+  <linearGradient id="${px}-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" class="s-trunkDark"/><stop offset=".72" class="s-trunkDark"/><stop offset="1" class="s-trunkLit"/></linearGradient>
+  <linearGradient id="${px}-mossg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-mossA"/><stop offset="1" class="s-mossB"/></linearGradient>
+  <linearGradient id="${px}-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-ray" stop-opacity=".9"/><stop offset="1" class="s-ray" stop-opacity="0"/></linearGradient>
+  <linearGradient id="${px}-pathg" gradientUnits="userSpaceOnUse" x1="0" y1="520" x2="0" y2="1000"><stop offset="0" class="s-pathFar"/><stop offset="1" class="s-pathNear"/></linearGradient>
+  <linearGradient id="${px}-ground" gradientUnits="userSpaceOnUse" x1="0" y1="520" x2="0" y2="1000"><stop offset="0" class="s-groundA"/><stop offset="1" class="s-groundB"/></linearGradient>
+  <linearGradient id="${px}-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-shade" stop-opacity=".55"/><stop offset="1" class="s-shade" stop-opacity="0"/></linearGradient>
+  <radialGradient id="${px}-vig" cx="50%" cy="46%" r="72%"><stop offset="0" stop-color="#06110a" stop-opacity="0"/><stop offset=".62" stop-color="#06110a" stop-opacity="0"/><stop offset="1" stop-color="#06110a" stop-opacity=".58"/></radialGradient>
+  <filter id="${px}-soft0" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="${px}-soft2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+  <path id="${px}-leaf" d="M0 0 C 5 -8 13 -10 19 -4 C 14 4 6 6 0 0 Z"/>
+  <path id="${px}-moss" fill="url(#${px}-mossg)" d="M0 0 C 12 -8 26 -6 34 4 C 46 -2 60 6 62 20 C 70 30 64 46 52 50 C 46 62 28 64 18 54 C 4 58 -8 46 -6 32 C -12 20 -10 6 0 0 Z"/>
+  <path id="${px}-frond" d="M0 0 C -2 -18 -1 -34 4 -50 C 0 -46 -6 -44 -10 -46 C -4 -50 -1 -56 2 -62 C -3 -60 -9 -60 -13 -63 C -6 -66 -2 -70 1 -76 C -3 -75 -8 -76 -11 -79 C -5 -81 -1 -85 2 -92 C 0 -90 -4 -91 -6 -94 C -1 -96 3 -100 6 -108 C 8 -100 12 -96 17 -94 C 15 -91 11 -90 9 -92 C 12 -85 16 -81 22 -79 C 19 -76 14 -75 10 -76 C 13 -70 17 -66 24 -63 C 20 -60 14 -60 9 -62 C 12 -56 15 -50 21 -46 C 17 -44 11 -46 7 -50 C 12 -34 13 -18 11 0 Z"/>
+ </defs>
+ <g class="sky">
+  <rect width="1600" height="1000" fill="url(#${px}-sky)"/>
+  <ellipse class="f-haze" cx="800" cy="300" rx="950" ry="280" opacity=".3" filter="url(#${px}-soft2)"/>
+  <rect class="sunGlow live" width="1600" height="1000" fill="url(#${px}-sun)"/>
+  <circle class="sunDisc f-sunCore" cx="1008" cy="259" r="42" opacity=".9" filter="url(#${px}-soft0)"/>
+  <rect class="dawnVeil live f-sunHalo" width="1600" height="1000" opacity=".12" style="mix-blend-mode:screen"/>
+ </g>
+ <g data-depth="0.04" filter="url(#${px}-soft0)">${far}</g>
+ <g data-depth="0.09">${mid}</g>
+ <g data-depth="0.13" class="canopy live"><rect width="1600" height="160" fill="url(#${px}-shade)"/>${canopy}</g>
+ <g data-depth="0.2"><path fill="url(#${px}-ground)" d="M0 560 C 300 520 500 540 806 520 C 1100 540 1300 520 1600 560 L1600 1000 L0 1000 Z"/></g>
+ <g data-depth="0.22">
+  <path fill="url(#${px}-pathg)" d="M760 520 C 748 600 700 680 640 760 C 560 860 470 930 380 1000 L 1180 1000 C 1060 900 980 800 920 700 C 880 630 858 570 852 520 Z"/>
+  <ellipse class="f-pathLit" cx="700" cy="760" rx="140" ry="26" opacity=".45" filter="url(#${px}-soft0)" transform="rotate(-8 700 760)"/>
+  <ellipse class="f-pathLit" cx="820" cy="640" rx="90" ry="16" opacity=".4" filter="url(#${px}-soft0)"/>
+  <ellipse class="f-pathLit" cx="760" cy="880" rx="180" ry="30" opacity=".4" filter="url(#${px}-soft0)" transform="rotate(-5 760 880)"/>
+  ${litter}${peb}
+ </g>
+ <g data-depth="0.16" class="mistG live">
+  <ellipse class="mistBand m1 f-mist" cx="800" cy="560" rx="760" ry="54" opacity=".55" filter="url(#${px}-soft2)"/>
+  <ellipse class="mistBand m2 f-mist" cx="620" cy="640" rx="640" ry="64" opacity=".4" filter="url(#${px}-soft2)"/>
+  <ellipse class="mistBand m3 f-mist" cx="1000" cy="700" rx="700" ry="70" opacity=".3" filter="url(#${px}-soft2)"/>
+ </g>
+ <g data-depth="0.06" class="rays live" style="mix-blend-mode:screen">${rayStr}</g>
+ <g class="sparks" data-depth="0.1">${sparks}</g>
+ <g data-depth="0.3"><g id="${px}-LT">${tree}</g><use href="#${px}-LT" transform="translate(1600 0) scale(-1 1)"/></g>
+ <g data-depth="0.36">${under}</g>
+ <rect width="1600" height="1000" fill="url(#${px}-vig)" pointer-events="none"/>
+</svg>`;
+}
+
+function miniScene(px,p){
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs>
+  <linearGradient id="${px}-ms" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p.skyA}"/><stop offset="1" stop-color="${p.skyB}"/></linearGradient>
+  <radialGradient id="${px}-mg"><stop offset="0" stop-color="${p.sun}" stop-opacity=".9"/><stop offset="1" stop-color="${p.sun}" stop-opacity="0"/></radialGradient>
+  <filter id="${px}-mb" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+ </defs>
+ <rect width="400" height="220" fill="url(#${px}-ms)"/>
+ <circle cx="300" cy="62" r="92" fill="url(#${px}-mg)"/>
+ <circle cx="300" cy="62" r="15" fill="${p.sun}" opacity=".95"/>
+ <ellipse cx="60" cy="18" rx="80" ry="34" fill="${p.leaf}" opacity=".85"/>
+ <ellipse cx="160" cy="8" rx="90" ry="36" fill="${p.leaf}" opacity=".7"/>
+ <ellipse cx="255" cy="20" rx="70" ry="30" fill="${p.leaf}" opacity=".85"/>
+ <ellipse cx="345" cy="10" rx="80" ry="34" fill="${p.leaf}" opacity=".75"/>
+ <ellipse cx="300" cy="48" rx="46" ry="20" fill="${p.sun}" opacity=".28"/>
+ <rect x="26" y="20" width="12" height="140" fill="${p.trunk}" opacity=".9"/>
+ <rect x="88" y="14" width="9" height="146" fill="${p.trunk}" opacity=".8"/>
+ <rect x="150" y="26" width="14" height="134" fill="${p.trunk}" opacity=".9"/>
+ <rect x="238" y="18" width="10" height="142" fill="${p.trunk}" opacity=".8"/>
+ <rect x="304" y="30" width="13" height="130" fill="${p.trunk}" opacity=".85"/>
+ <rect x="362" y="12" width="15" height="148" fill="${p.trunk}" opacity=".9"/>
+ <rect y="150" width="400" height="70" fill="${p.ground}"/>
+ <polygon points="186,150 214,150 296,220 118,220" fill="${p.path}"/>
+ <ellipse cx="206" cy="186" rx="42" ry="8" fill="${p.sun}" opacity=".25"/>
+ <ellipse cx="200" cy="152" rx="170" ry="14" fill="${p.mist}" opacity="${p.mistOp}" filter="url(#${px}-mb)"/>
+ <circle cx="150" cy="205" r="3" fill="${p.sun}" opacity=".6"/><circle cx="255" cy="212" r="2.5" fill="${p.sun}" opacity=".5"/>
+ <circle cx="185" cy="216" r="2.5" fill="#c46a24" opacity=".55"/><circle cx="230" cy="198" r="2" fill="#c46a24" opacity=".5"/>
+</svg>`;
+}
+
+/* ================= MOUNT SCENES ================= */
+const heroScene=$('#heroScene'),seasonScene=$('#seasonScene');
+heroScene.innerHTML=makeScene('h');
+seasonScene.innerHTML=makeScene('s');
+
+function sceneRefs(root){
+ return {svg:$('svg',root),sunGrad:$('.sunGlow',root)?root.querySelector('radialGradient[id$="-sun"]'):null,
+  glow:$('.sunGlow',root),disc:$('.sunDisc',root),veil:$('.dawnVeil',root),
+  rays:$('.rays',root),canopy:$('.canopy',root),mist:$('.mistG',root)};
+}
+const heroR=sceneRefs(heroScene),seaR=sceneRefs(seasonScene);
+function applyLight(refs,st,canopyBase){
+ const cy=(42-st.light*.26);
+ refs.sunGrad.setAttribute('cy',cy+'%');
+ refs.disc.setAttribute('cy',(420-st.light*2.6).toFixed(0));
+ refs.rays.style.opacity=clamp((.3+st.light*.006)*(st.glow/70),0,1).toFixed(2);
+ refs.glow.style.opacity=(.55+st.glow/100*.45).toFixed(2);
+ refs.veil.style.opacity=((1-st.light/100)*.22*(st.glow/70)).toFixed(3);
+ refs.canopy.style.opacity=(canopyBase*(st.canopy/100)).toFixed(2);
+ refs.mist.style.opacity=(st.mist/100*.9).toFixed(2);
+}
+applyLight(heroR,{light:62,mist:60,canopy:90,glow:75},.95);
+
+/* ================= SEASONS CONTROLS ================= */
+const seaState={season:'autumn',light:62,mist:55,canopy:85,glow:70};
+const capName=$('#capName'),capNote=$('#capNote'),seasonNote=$('#seasonNote');
+const ctl={light:$('#ctlLight'),mist:$('#ctlMist'),canopy:$('#ctlCanopy'),glow:$('#ctlGlow')};
+const out={light:$('#outLight'),mist:$('#outMist'),canopy:$('#outCanopy'),glow:$('#outGlow')};
+function applySeasons(){
+ const s=SEASONS[seaState.season];
+ seasonScene.dataset.season=seaState.season;
+ applyLight(seaR,seaState,s.canopy);
+ capName.textContent=s.name;
+ capNote.textContent=s.note.split('.')[0]+'.';
+ seasonNote.textContent=s.note;
+ Object.keys(ctl).forEach(k=>{out[k].textContent=seaState[k];ctl[k].value=seaState[k];});
+ $$('.schip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.season===seaState.season)));
+}
+$$('.schip').forEach(b=>b.addEventListener('click',()=>{
+ seaState.season=b.dataset.season;
+ seaState.mist=SEASONS[b.dataset.season].mist;
+ applySeasons();
+}));
+Object.keys(ctl).forEach(k=>ctl[k].addEventListener('input',()=>{seaState[k]=+ctl[k].value;applySeasons();}));
+$('#ctlDrift').addEventListener('change',e=>seasonScene.classList.toggle('still',!e.target.checked));
+$('#ctlReset').addEventListener('click',()=>{
+ Object.assign(seaState,{season:'autumn',light:62,mist:55,canopy:85,glow:70});
+ $('#ctlDrift').checked=true;seasonScene.classList.remove('still');
+ applySeasons();
+});
+applySeasons();
+
+/* export current scene as standalone SVG */
+$('#dlScene').addEventListener('click',function(){
+ const btn=this,svg=seaR.svg,clone=svg.cloneNode(true);
+ clone.setAttribute('width','1600');clone.setAttribute('height','1000');
+ const os=svg.querySelectorAll('*'),cs=clone.querySelectorAll('*');
+ const fix=v=>(v&&v.indexOf('url(')===0)?v.replace(/url\(["']?[^)"']*#/,'url("#').replace(/["']?\)$/,'")'):v;
+ os.forEach((o,i)=>{const c=cs[i],st=getComputedStyle(o);
+  c.setAttribute('fill',fix(st.fill));
+  if(st.stroke!=='none'){c.setAttribute('stroke',fix(st.stroke));c.setAttribute('stroke-width',st.strokeWidth);c.setAttribute('stroke-linecap',st.strokeLinecap);}
+  c.setAttribute('opacity',st.opacity);
+  if(o.tagName.toLowerCase()==='stop'){c.setAttribute('stop-color',st.stopColor);c.setAttribute('stop-opacity',st.stopOpacity);}
+  if(st.mixBlendMode&&st.mixBlendMode!=='normal')c.style.mixBlendMode=st.mixBlendMode;
+  c.removeAttribute('class');
+ });
+ const src='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(clone);
+ const url=URL.createObjectURL(new Blob([src],{type:'image/svg+xml'}));
+ const a=document.createElement('a');a.href=url;a.download='stillwood-'+seaState.season+'.svg';
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),4000);
+ const label=$('span',btn),old=label.textContent;
+ label.textContent='Saved ✓';btn.disabled=true;
+ setTimeout(()=>{label.textContent=old;btn.disabled=false;},2000);
+});
+
+/* ================= TRAILS ================= */
+const grid=$('#trailGrid');
+TRAILS.forEach((t,i)=>{
+ const card=document.createElement('article');
+ card.className='trail reveal';card.dataset.diff=t.diff;card.style.setProperty('--d',(i*.08)+'s');
+ card.innerHTML=`<div class="mini">${miniScene('m'+i,t.pal)}</div>
+ <div class="trail-body">
+  <div class="trail-top"><h3>${t.name}</h3><span class="dchip d-${t.diff}">${t.diffLabel}</span></div>
+  <div class="tstats">
+   <span><svg class="icon"><use href="#i-route"/></svg>${t.km}</span>
+   <span><svg class="icon"><use href="#i-clock"/></svg>${t.time}</span>
+   <span><svg class="icon"><use href="#i-mountain"/></svg>${t.ascent}</span>
+  </div>
+  <p>${t.blurb}</p>
+  <button class="tlink" data-trail="${t.id}">View trail <svg class="icon"><use href="#i-arrowR"/></svg></button>
+ </div>`;
+ grid.appendChild(card);
+});
+const fcount=$('#fcount');
+$$('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+ $$('.fbtn').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ const f=b.dataset.f;let n=0;
+ $$('.trail',grid).forEach(c=>{
+  const show=f==='all'||c.dataset.diff===f;
+  c.classList.toggle('hide',!show);
+  if(show){n++;c.style.animation='none';void c.offsetWidth;c.style.animation='';}
+ });
+ fcount.textContent=n+(n===1?' trail':' trails');
+}));
+
+/* modal */
+const modal=$('#trailModal'),modalPanel=$('.modal-panel',modal);
+let lastFocus=null,modalTrail=null;
+function openModal(t){
+ modalTrail=t;lastFocus=document.activeElement;
+ $('#modalMini').innerHTML=miniScene('mm',t.pal);
+ $('#modalTitle').textContent=t.name;
+ const chip=$('#modalChip');chip.textContent=t.diffLabel;chip.className='dchip d-'+t.diff;
+ $('#modalStats').innerHTML=`<span><svg class="icon"><use href="#i-route"/></svg>${t.km}</span>
+  <span><svg class="icon"><use href="#i-clock"/></svg>${t.time}</span>
+  <span><svg class="icon"><use href="#i-mountain"/></svg>${t.ascent}</span>
+  <span><svg class="icon"><use href="#i-users"/></svg>max 8 walkers</span>`;
+ $('#modalDesc1').textContent=t.d1;$('#modalDesc2').textContent=t.d2;
+ $('#modalNotices').innerHTML=t.notices.map(n=>`<li><svg class="icon"><use href="#i-leaf"/></svg>${n}</li>`).join('');
+ $('#modalPrice').textContent='$'+t.price;
+ modal.classList.add('open');document.body.style.overflow='hidden';
+ $('#modalClose').focus();
+}
+function closeModal(){
+ modal.classList.remove('open');document.body.style.overflow='';
+ if(lastFocus)lastFocus.focus();
+}
+grid.addEventListener('click',e=>{
+ const b=e.target.closest('.tlink');if(!b)return;
+ openModal(TRAILS.find(t=>t.id===b.dataset.trail));
+});
+$('#modalClose').addEventListener('click',closeModal);
+$('#modalScrim').addEventListener('click',closeModal);
+modal.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){closeModal();return;}
+ if(e.key!=='Tab')return;
+ const f=$$('button, [href], input, select',modalPanel).filter(x=>!x.disabled);
+ if(!f.length)return;
+ const first=f[0],last=f[f.length-1];
+ if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+ else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+});
+$('#modalReserve').addEventListener('click',()=>{
+ if(modalTrail){$('#inTrail').value=modalTrail.id;updatePrice();}
+ closeModal();
+ setTimeout(()=>{
+  $('#visit').scrollIntoView({behavior:RM?'auto':'smooth'});
+  const card=$('#bookCard');card.classList.remove('flash');void card.offsetWidth;card.classList.add('flash');
+ },80);
+});
+
+/* ================= VOICES ================= */
+const stack=$('#voicesStack'),dotsBox=$('#vDots'),vBar=$('#vBar'),voicesBox=$('#voicesBox');
+VOICES.forEach((v,i)=>{
+ const d=document.createElement('div');
+ d.className='voice'+(i===0?' active':'');
+ d.setAttribute('aria-hidden',String(i!==0));
+ d.innerHTML=`<blockquote>“${v.q}”</blockquote>
+  <div class="leaves" aria-label="Five leaves out of five">${'<svg class="icon"><use href="#i-leaf"/></svg>'.repeat(5)}</div>
+  <div class="who">${v.who}<span>${v.meta}</span></div>`;
+ stack.appendChild(d);
+ const dot=document.createElement('button');
+ dot.className='dot'+(i===0?' active':'');dot.setAttribute('aria-label','Testimonial '+(i+1));
+ dot.addEventListener('click',()=>{showVoice(i);restartVoice();});
+ dotsBox.appendChild(dot);
+});
+let vIdx=0,vTimer=null;
+function showVoice(i){
+ vIdx=(i+VOICES.length)%VOICES.length;
+ $$('.voice',stack).forEach((el,k)=>{el.classList.toggle('active',k===vIdx);el.setAttribute('aria-hidden',String(k!==vIdx));});
+ $$('.dot',dotsBox).forEach((el,k)=>el.classList.toggle('active',k===vIdx));
+ if(!RM){vBar.classList.remove('run');void vBar.offsetWidth;vBar.classList.add('run');}
+}
+function restartVoice(){
+ if(RM)return;
+ clearInterval(vTimer);
+ vTimer=setInterval(()=>showVoice(vIdx+1),6000);
+}
+$('#vPrev').addEventListener('click',()=>{showVoice(vIdx-1);restartVoice();});
+$('#vNext').addEventListener('click',()=>{showVoice(vIdx+1);restartVoice();});
+voicesBox.addEventListener('mouseenter',()=>{clearInterval(vTimer);vTimer=null;});
+voicesBox.addEventListener('mouseleave',()=>{if(!vTimer){showVoice(vIdx);restartVoice();}});
+voicesBox.addEventListener('focusin',()=>{clearInterval(vTimer);vTimer=null;});
+voicesBox.addEventListener('focusout',e=>{if(!voicesBox.contains(e.relatedTarget)&&!vTimer){showVoice(vIdx);restartVoice();}});
+showVoice(0);restartVoice();
+
+/* ================= BOOKING ================= */
+const inTrail=$('#inTrail'),inDate=$('#inDate'),inTime=$('#inTime'),inGuided=$('#inGuided');
+const gCount=$('#gCount'),priceVal=$('#priceVal'),priceBreak=$('#priceBreak');
+let guests=2,lastBooking=null;
+TRAILS.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=`${t.name} — $${t.price}/walker`;inTrail.appendChild(o);});
+inTrail.value='amber';
+const today=new Date(),iso=d=>d.toISOString().slice(0,10);
+inDate.min=iso(today);
+const def=new Date(today);def.setDate(def.getDate()+3);inDate.value=iso(def);
+function updatePrice(){
+ const t=TRAILS.find(x=>x.id===inTrail.value)||TRAILS[0];
+ const total=t.price*guests+(inGuided.checked?24:0);
+ priceVal.textContent='$'+total;
+ priceBreak.textContent=`${guests} walker${guests>1?'s':''} · ${inGuided.checked?'guided':'self-guided'}`;
+ gCount.textContent=guests;
+}
+$('#gMinus').addEventListener('click',()=>{guests=clamp(guests-1,1,8);updatePrice();});
+$('#gPlus').addEventListener('click',()=>{guests=clamp(guests+1,1,8);updatePrice();});
+inTrail.addEventListener('change',updatePrice);
+inGuided.addEventListener('change',updatePrice);
+updatePrice();
+function setInvalid(id,bad){$('#'+id).classList.toggle('invalid',bad);const inp=$('input,select',$('#'+id));if(inp)inp.setAttribute('aria-invalid',String(bad));return !bad;}
+['inName','inEmail','inDate','inTrail'].forEach(id=>$('#'+id).addEventListener('input',e=>e.target.closest('.field').classList.remove('invalid')));
+$('#bookForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=$('#inName').value.trim(),email=$('#inEmail').value.trim(),date=inDate.value;
+ const okName=setInvalid('fName',name.length<2);
+ const okEmail=setInvalid('fEmail',!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email));
+ const okDate=setInvalid('fDate',!date||date<inDate.min);
+ const okTrail=setInvalid('fTrail',!inTrail.value);
+ if(!(okName&&okEmail&&okDate&&okTrail)){
+  const first=$('.field.invalid input,.field.invalid select');if(first)first.focus();
+  return;
+ }
+ const t=TRAILS.find(x=>x.id===inTrail.value);
+ const total=t.price*guests+(inGuided.checked?24:0);
+ const ref='SW-'+Math.random().toString(36).slice(2,8).toUpperCase();
+ lastBooking={ref,name,email,date,time:inTime.value,trail:t,guests,guided:inGuided.checked,total};
+ $('#bkRef').textContent=ref;
+ const niceDate=new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+ $('#bkSummary').innerHTML=`
+  <div><span>Trail</span><b>${t.name}</b></div>
+  <div><span>When</span><b>${niceDate} · ${inTime.value}</b></div>
+  <div><span>Party</span><b>${guests} walker${guests>1?'s':''}${inGuided.checked?' · guided':''}</b></div>
+  <div><span>At the gate</span><b>$${total}</b></div>`;
+ $('#bkMail').textContent=`A confirmation is on its way to ${email}. One seedling will be planted in your name.`;
+ $('#bookCard').classList.add('done');
+ chime();
+ $('#bookCard').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});
+});
+$('#bkAgain').addEventListener('click',()=>{
+ $('#bookCard').classList.remove('done');
+ $('#bookForm').reset();guests=2;inTrail.value='amber';inDate.value=iso(def);inGuided.checked=true;updatePrice();
+ $('#inName').focus();
+});
+$('#bkIcs').addEventListener('click',()=>{
+ if(!lastBooking)return;
+ const b=lastBooking;
+ const dt=b.date.replace(/-/g,'')+'T'+b.time.replace(':','')+'00';
+ const stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+ const esc=s=>s.replace(/,/g,'\\,');
+ const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Stillwood//Walk//EN','BEGIN:VEVENT',
+  'UID:'+b.ref+'@stillwood','DTSTAMP:'+stamp,'DTSTART:'+dt,'DURATION:PT2H',
+  'SUMMARY:'+esc('Stillwood — '+b.trail.name+(b.guided?' (guided)':'')),
+  'LOCATION:Hollow Creek Valley\\, Forest Road 27',
+  'DESCRIPTION:'+esc('Reservation '+b.ref+' · '+b.guests+' walkers · $'+b.total+' at the gate. Arrive 15 minutes early; phones sleep in the cedar lockers.'),
+  'END:VEVENT','END:VCALENDAR'].join('\r\n');
+ const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+ const a=document.createElement('a');a.href=url;a.download=b.ref+'.ics';
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),4000);
+});
+
+/* ================= FAQ ================= */
+$$('.faq-item').forEach(item=>{
+ const q=$('.faq-q',item);
+ q.addEventListener('click',()=>{
+  const open=item.classList.contains('open');
+  $$('.faq-item.open').forEach(o=>{o.classList.remove('open');$('.faq-q',o).setAttribute('aria-expanded','false');});
+  if(!open){item.classList.add('open');q.setAttribute('aria-expanded','true');}
+ });
+});
+
+/* ================= NEWSLETTER ================= */
+const newsBox=$('#newsBox');
+try{if(localStorage.getItem('sw-news')==='1')newsBox.classList.add('done');}catch(e){}
+$('#newsForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const v=$('#newsEmail').value.trim();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){$('#newsErr').classList.add('show');$('#newsEmail').focus();return;}
+ $('#newsErr').classList.remove('show');
+ newsBox.classList.add('done');
+ try{localStorage.setItem('sw-news','1');}catch(err){}
+});
+$('#newsEmail').addEventListener('input',()=>$('#newsErr').classList.remove('show'));
+
+/* ================= NAV / MENU / SCROLLSPY ================= */
+const nav=$('#nav'),progress=$('#progress'),burger=$('#burger'),mmenu=$('#mmenu');
+function setMenu(open){
+ document.body.classList.toggle('menu-open',open);
+ burger.setAttribute('aria-expanded',String(open));
+ mmenu.setAttribute('aria-hidden',String(!open));
+ if(open){const f=$('a',mmenu);if(f)f.focus();}
+}
+burger.addEventListener('click',()=>setMenu(!document.body.classList.contains('menu-open')));
+$$('a',mmenu).forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('menu-open'))setMenu(false);});
+const spyLinks=$$('#navLinks a');
+const spy=new IntersectionObserver(entries=>{
+ entries.forEach(en=>{
+  if(en.isIntersecting){
+   spyLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id));
+  }
+ });
+},{rootMargin:'-40% 0px -55% 0px'});
+['practice','trails','seasons','voices','visit'].forEach(id=>{const el=document.getElementById(id);if(el)spy.observe(el);});
+$('#topBtn').addEventListener('click',()=>window.scrollTo({top:0,behavior:RM?'auto':'smooth'}));
+
+/* reveals */
+const ro=new IntersectionObserver(entries=>{
+ entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');ro.unobserve(en.target);}});
+},{threshold:.12});
+$$('.reveal').forEach(el=>ro.observe(el));
+
+/* ================= AMBIENT SOUND ================= */
+let soundOn=true,actx=null,master=null,birdTimer=null;
+const soundBtn=$('#soundBtn'),soundIcon=$('#soundIcon');
+function updateSoundUI(){
+ soundBtn.classList.toggle('muted',!soundOn);
+ soundBtn.setAttribute('aria-pressed',String(soundOn));
+ soundIcon.setAttribute('href',soundOn?'#i-sound':'#i-soundoff');
+ soundBtn.classList.toggle('playing',soundOn&&!!actx&&actx.state==='running');
+}
+function ensureAudio(){
+ if(actx||!soundOn)return;
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  actx=new AC();
+  master=actx.createGain();master.gain.value=0;master.connect(actx.destination);
+  master.gain.setTargetAtTime(.8,actx.currentTime,.4);
+  /* wind: looped filtered noise with slow breathing */
+  const len=actx.sampleRate*2,buf=actx.createBuffer(1,len,actx.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const src=actx.createBufferSource();src.buffer=buf;src.loop=true;
+  const lp=actx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=380;lp.Q.value=.7;
+  const wg=actx.createGain();wg.gain.value=.05;
+  src.connect(lp);lp.connect(wg);wg.connect(master);src.start();
+  const lfo=actx.createOscillator(),lg=actx.createGain();
+  lfo.frequency.value=.06;lg.gain.value=.024;lfo.connect(lg);lg.connect(wg.gain);lfo.start();
+  const lfo2=actx.createOscillator(),lg2=actx.createGain();
+  lfo2.frequency.value=.11;lg2.gain.value=120;lfo2.connect(lg2);lg2.connect(lp.frequency);lfo2.start();
+  actx.addEventListener('statechange',updateSoundUI);
+  scheduleBird();
+  updateSoundUI();
+ }catch(e){actx=null;}
+}
+function scheduleBird(){
+ clearTimeout(birdTimer);
+ birdTimer=setTimeout(()=>{
+  if(actx&&actx.state==='running'&&soundOn){chirp();spawnLeaf();}
+  scheduleBird();
+ },5000+Math.random()*6000);
+}
+function chirp(){
+ const t0=actx.currentTime+.02;
+ const n=2+Math.floor(Math.random()*2);
+ for(let k=0;k<n;k++){
+  const o=actx.createOscillator(),g=actx.createGain();
+  const f=2400+Math.random()*800,t=t0+k*.17;
+  o.type='sine';
+  o.frequency.setValueAtTime(f,t);
+  o.frequency.exponentialRampToValueAtTime(f*1.3,t+.05);
+  o.frequency.exponentialRampToValueAtTime(f*.88,t+.12);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(.07,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+.14);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+.16);
+ }
+}
+function chime(){
+ if(!actx||actx.state!=='running'||!soundOn)return;
+ const t0=actx.currentTime+.02;
+ [523.25,783.99].forEach((f,k)=>{
+  const o=actx.createOscillator(),g=actx.createGain(),t=t0+k*.14;
+  o.type='sine';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+.03);
+  g.gain.exponentialRampToValueAtTime(.0001,t+.9);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+1);
+ });
+}
+soundBtn.addEventListener('click',()=>{
+ soundOn=!soundOn;
+ if(soundOn){ensureAudio();if(actx)actx.resume();}
+ if(master&&actx)master.gain.setTargetAtTime(soundOn?.8:0,actx.currentTime,.08);
+ updateSoundUI();
+});
+const wake=()=>{if(soundOn){ensureAudio();if(actx&&actx.state==='suspended')actx.resume().then(updateSoundUI);}};
+window.addEventListener('pointerdown',wake,{once:true,capture:true});
+window.addEventListener('keydown',wake,{once:true,capture:true});
+document.addEventListener('visibilitychange',()=>{
+ if(!actx)return;
+ if(document.hidden)actx.suspend();
+ else if(soundOn)actx.resume().then(updateSoundUI);
+});
+updateSoundUI();
+
+/* ================= HERO FX + PARALLAX + GLOBAL LOOP ================= */
+const hero=$('#hero'),canvas=$('#heroFx'),ctx=canvas.getContext('2d');
+let heroVisible=true,W=0,H=0,pollen=[],leaves=[],leafClock=0,leafNext=7;
+const litterColors=['#e8a13c','#c46a24','#e8c04a'];
+function sizeCanvas(){
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ W=hero.clientWidth;H=hero.clientHeight;
+ canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ const n=clamp(Math.round(W*H/24000),40,110);
+ pollen=[];
+ for(let i=0;i<n;i++)pollen.push({x:Math.random()*W,y:Math.random()*H,r:.6+Math.random()*1.7,
+  sp:5+Math.random()*11,ph:Math.random()*Math.PI*2,fr:.3+Math.random()*.7,amp:6+Math.random()*14,
+  a:.15+Math.random()*.5,warm:Math.random()<.6});
+ if(RM)drawStatic();
+}
+function drawStatic(){
+ ctx.clearRect(0,0,W,H);
+ ctx.globalCompositeOperation='lighter';
+ pollen.forEach(p=>{ctx.globalAlpha=p.a*.7;ctx.fillStyle=p.warm?'#ffe9b0':'#f4f1e2';
+  ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();});
+ ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+}
+function spawnLeaf(){
+ if(RM||!heroVisible||leaves.length>=8)return;
+ leaves.push({x:W*(.15+Math.random()*.7),y:-24,vy:34+Math.random()*30,rot:Math.random()*Math.PI*2,
+  vr:(Math.random()-.5)*2.4,ph:Math.random()*Math.PI*2,size:8+Math.random()*7,
+  c:litterColors[Math.floor(Math.random()*litterColors.length)]});
+}
+const pGroups=$$('g[data-depth]',heroScene).map(g=>({g,d:+g.dataset.depth}));
+let px=0,py=0,tpx=0,tpy=0,scrollDirty=true,prevTs=0,elapsed=0;
+hero.addEventListener('pointermove',e=>{
+ const r=hero.getBoundingClientRect();
+ tpx=(e.clientX-r.left)/r.width-.5;tpy=(e.clientY-r.top)/r.height-.5;
+});
+hero.addEventListener('pointerleave',()=>{tpx=0;tpy=0;});
+window.addEventListener('scroll',()=>{scrollDirty=true;},{passive:true});
+window.addEventListener('resize',()=>{sizeCanvas();scrollDirty=true;});
+new IntersectionObserver(en=>{heroVisible=en[0].isIntersecting;},{threshold:.02}).observe(hero);
+sizeCanvas();
+function frame(ts){
+ const dt=Math.min(.05,(ts-prevTs)/1000||.016);prevTs=ts;elapsed+=dt;
+ if(scrollDirty){
+  scrollDirty=false;
+  const y=window.scrollY;
+  nav.classList.toggle('scrolled',y>30);
+  const max=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.width=(max>0?(y/max*100):0)+'%';
+  document.documentElement.style.setProperty('--hueShift',(clamp(y/Math.max(max,1),0,1)*22).toFixed(1)+'deg');
+ }
+ if(heroVisible&&!RM){
+  px+=(tpx-px)*.06;py+=(tpy-py)*.06;
+  const prog=clamp(window.scrollY/Math.max(H,1),0,1.2);
+  pGroups.forEach(o=>{
+   const tx=(-px*o.d*60).toFixed(1),ty=(prog*o.d*170+py*o.d*24).toFixed(1);
+   o.g.style.transform=`translate(${tx}px, ${ty}px)`;
+  });
+  /* particles */
+  ctx.clearRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  for(let i=0;i<pollen.length;i++){const p=pollen[i];
+   p.y-=p.sp*dt;p.x+=Math.sin(elapsed*p.fr+p.ph)*p.amp*dt;
+   if(p.y<-12){p.y=H+12;p.x=Math.random()*W;}
+   const tw=.6+.4*Math.sin(elapsed*1.4+p.ph);
+   ctx.globalAlpha=p.a*tw;
+   ctx.fillStyle=p.warm?'#ffe9b0':'#f4f1e2';
+   ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
+   if(p.r>1.8){ctx.globalAlpha=p.a*tw*.12;ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,7);ctx.fill();}
+  }
+  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
+  leafClock+=dt;
+  if(leafClock>leafNext){leafClock=0;leafNext=6+Math.random()*5;spawnLeaf();}
+  for(let i=leaves.length-1;i>=0;i--){const l=leaves[i];
+   l.y+=l.vy*dt;l.x+=Math.sin(elapsed*1.1+l.ph)*26*dt;l.rot+=l.vr*dt;
+   if(l.y>H+30){leaves.splice(i,1);continue;}
+   ctx.save();ctx.translate(l.x,l.y);ctx.rotate(l.rot);ctx.scale(l.size/18,l.size/18);
+   ctx.globalAlpha=.9;ctx.fillStyle=l.c;
+   ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(5,-8,13,-10,19,-4);ctx.bezierCurveTo(14,4,6,6,0,0);ctx.fill();
+   ctx.restore();
+  }
+  ctx.globalAlpha=1;
+ }
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
